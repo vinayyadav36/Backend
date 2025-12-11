@@ -1,0 +1,971 @@
+2025-12-07 14:48:26 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:48:26 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:48:26 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:48:26 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:48:26 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:48:26 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:48:27 [error]: ❌ Database connection failed:
+2025-12-07 14:48:27 [error]: Stack:
+2025-12-07 14:48:27 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:48:32 [error]: ❌ Database connection failed:
+2025-12-07 14:48:32 [error]: Stack:
+2025-12-07 14:48:32 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:48:38 [error]: ❌ Database connection failed:
+2025-12-07 14:48:38 [error]: Stack:
+2025-12-07 14:48:38 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:48:44 [error]: ❌ Database connection failed:
+2025-12-07 14:48:44 [error]: Stack:
+2025-12-07 14:48:44 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:48:49 [error]: ❌ Database connection failed:
+2025-12-07 14:48:49 [error]: Stack:
+2025-12-07 14:48:49 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:48:55 [error]: ❌ Database connection failed:
+2025-12-07 14:48:55 [error]: Stack:
+2025-12-07 14:48:55 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:00 [error]: ❌ Database connection failed:
+2025-12-07 14:49:00 [error]: Stack:
+2025-12-07 14:49:00 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:06 [error]: ❌ Database connection failed:
+2025-12-07 14:49:06 [error]: Stack:
+2025-12-07 14:49:06 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:11 [error]: ❌ Database connection failed:
+2025-12-07 14:49:11 [error]: Stack:
+2025-12-07 14:49:11 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:17 [error]: ❌ Database connection failed:
+2025-12-07 14:49:17 [error]: Stack:
+2025-12-07 14:49:17 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:23 [error]: ❌ Database connection failed:
+2025-12-07 14:49:23 [error]: Stack:
+2025-12-07 14:49:23 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:28 [error]: ❌ Database connection failed:
+2025-12-07 14:49:28 [error]: Stack:
+2025-12-07 14:49:28 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:34 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:34 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:34 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:49:34 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:49:34 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:49:34 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:49:34 [error]: ❌ Database connection failed:
+2025-12-07 14:49:34 [error]: Stack:
+2025-12-07 14:49:34 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:36 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:36 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:36 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:49:36 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:49:36 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:49:36 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:49:37 [error]: ❌ Database connection failed:
+2025-12-07 14:49:37 [error]: Stack:
+2025-12-07 14:49:37 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:39 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:39 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:39 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:49:39 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:49:39 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:49:39 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:49:40 [error]: ❌ Database connection failed:
+2025-12-07 14:49:40 [error]: Stack:
+2025-12-07 14:49:40 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:41 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:41 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:41 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:49:41 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:49:41 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:49:41 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:49:42 [error]: ❌ Database connection failed:
+2025-12-07 14:49:42 [error]: Stack:
+2025-12-07 14:49:42 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:48 [error]: ❌ Database connection failed:
+2025-12-07 14:49:48 [error]: Stack:
+2025-12-07 14:49:48 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:53 [error]: ❌ Database connection failed:
+2025-12-07 14:49:53 [error]: Stack:
+2025-12-07 14:49:53 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:49:59 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:59 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:49:59 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:49:59 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:49:59 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:49:59 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:50:00 [error]: ❌ Database connection failed:
+2025-12-07 14:50:00 [error]: Stack:
+2025-12-07 14:50:00 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:02 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:02 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:02 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:50:02 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:50:02 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:50:02 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:50:02 [error]: ❌ Database connection failed:
+2025-12-07 14:50:02 [error]: Stack:
+2025-12-07 14:50:02 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:04 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:04 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:04 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:50:04 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:50:04 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:50:04 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:50:05 [error]: ❌ Database connection failed:
+2025-12-07 14:50:05 [error]: Stack:
+2025-12-07 14:50:05 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:08 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:08 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:08 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:50:08 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:50:08 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:50:08 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:50:09 [error]: ❌ Database connection failed:
+2025-12-07 14:50:09 [error]: Stack:
+2025-12-07 14:50:09 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:19 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:19 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:19 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:50:19 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:50:19 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:50:19 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:50:20 [error]: ❌ Database connection failed:
+2025-12-07 14:50:20 [error]: Stack:
+2025-12-07 14:50:20 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:33 [error]: ❌ Database connection failed:
+2025-12-07 14:50:33 [error]: Stack:
+2025-12-07 14:50:33 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:40 [error]: ❌ Database connection failed:
+2025-12-07 14:50:40 [error]: Stack:
+2025-12-07 14:50:40 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:50 [error]: ❌ Database connection failed:
+2025-12-07 14:50:50 [error]: Stack:
+2025-12-07 14:50:50 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:50:54 [warn]: Warning: Duplicate schema index on {"confirmationNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Booking.js:215:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\bookingController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:54 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:50:54 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:50:54 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:50:54 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:50:54 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:50:57 [error]: ❌ Database connection failed:
+2025-12-07 14:50:57 [error]: Stack:
+2025-12-07 14:50:57 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:09 [error]: ❌ Database connection failed:
+2025-12-07 14:51:09 [error]: Stack:
+2025-12-07 14:51:09 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:15 [error]: ❌ Database connection failed:
+2025-12-07 14:51:15 [error]: Stack:
+2025-12-07 14:51:15 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:21 [error]: ❌ Database connection failed:
+2025-12-07 14:51:21 [error]: Stack:
+2025-12-07 14:51:21 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:26 [error]: ❌ Database connection failed:
+2025-12-07 14:51:26 [error]: Stack:
+2025-12-07 14:51:26 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:32 [error]: ❌ Database connection failed:
+2025-12-07 14:51:32 [error]: Stack:
+2025-12-07 14:51:32 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:38 [error]: ❌ Database connection failed:
+2025-12-07 14:51:38 [error]: Stack:
+2025-12-07 14:51:38 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:44 [error]: ❌ Database connection failed:
+2025-12-07 14:51:44 [error]: Stack:
+2025-12-07 14:51:44 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:50 [error]: ❌ Database connection failed:
+2025-12-07 14:51:50 [error]: Stack:
+2025-12-07 14:51:50 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:51:55 [error]: ❌ Database connection failed:
+2025-12-07 14:51:55 [error]: Stack:
+2025-12-07 14:51:55 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:01 [error]: ❌ Database connection failed:
+2025-12-07 14:52:01 [error]: Stack:
+2025-12-07 14:52:01 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:07 [error]: ❌ Database connection failed:
+2025-12-07 14:52:07 [error]: Stack:
+2025-12-07 14:52:07 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:13 [error]: ❌ Database connection failed:
+2025-12-07 14:52:13 [error]: Stack:
+2025-12-07 14:52:13 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:19 [error]: ❌ Database connection failed:
+2025-12-07 14:52:19 [error]: Stack:
+2025-12-07 14:52:19 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:24 [error]: ❌ Database connection failed:
+2025-12-07 14:52:24 [error]: Stack:
+2025-12-07 14:52:24 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:30 [error]: ❌ Database connection failed:
+2025-12-07 14:52:30 [error]: Stack:
+2025-12-07 14:52:30 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:36 [error]: ❌ Database connection failed:
+2025-12-07 14:52:36 [error]: Stack:
+2025-12-07 14:52:36 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:42 [error]: ❌ Database connection failed:
+2025-12-07 14:52:42 [error]: Stack:
+2025-12-07 14:52:42 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:48 [error]: ❌ Database connection failed:
+2025-12-07 14:52:48 [error]: Stack:
+2025-12-07 14:52:48 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:52:54 [error]: ❌ Database connection failed:
+2025-12-07 14:52:54 [error]: Stack:
+2025-12-07 14:52:54 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:00 [error]: ❌ Database connection failed:
+2025-12-07 14:53:00 [error]: Stack:
+2025-12-07 14:53:00 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:05 [error]: ❌ Database connection failed:
+2025-12-07 14:53:05 [error]: Stack:
+2025-12-07 14:53:05 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:11 [error]: ❌ Database connection failed:
+2025-12-07 14:53:11 [error]: Stack:
+2025-12-07 14:53:11 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:17 [error]: ❌ Database connection failed:
+2025-12-07 14:53:17 [error]: Stack:
+2025-12-07 14:53:17 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:22 [error]: ❌ Database connection failed:
+2025-12-07 14:53:22 [error]: Stack:
+2025-12-07 14:53:22 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:28 [error]: ❌ Database connection failed:
+2025-12-07 14:53:28 [error]: Stack:
+2025-12-07 14:53:28 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:34 [warn]: Warning: Duplicate schema index on {"invoiceNumber":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+    at Object.warn (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\utils.js:1048:18)
+    at Schema.index (D:\Hotel_Mangement\Backend\node_modules\mongoose\lib\schema.js:2308:13)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\models\Invoice.js:247:15)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\controllers\invoiceController.js:7:17)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+2025-12-07 14:53:34 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:53:34 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:53:34 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:53:34 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:53:36 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:53:36 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:53:36 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:53:36 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:53:37 [error]: ❌ Database connection failed:
+2025-12-07 14:53:37 [error]: Stack:
+2025-12-07 14:53:37 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:42 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:53:42 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:53:42 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:53:42 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:53:43 [error]: ❌ Database connection failed:
+2025-12-07 14:53:43 [error]: Stack:
+2025-12-07 14:53:43 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:49 [error]: ❌ Database connection failed:
+2025-12-07 14:53:49 [error]: Stack:
+2025-12-07 14:53:49 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:51 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:53:51 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:53:51 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:53:51 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:53:52 [error]: ❌ Database connection failed:
+2025-12-07 14:53:52 [error]: Stack:
+2025-12-07 14:53:52 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:53:58 [error]: ❌ Database connection failed:
+2025-12-07 14:53:58 [error]: Stack:
+2025-12-07 14:53:58 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:05 [error]: ❌ Database connection failed:
+2025-12-07 14:54:05 [error]: Stack:
+2025-12-07 14:54:05 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:11 [error]: ❌ Database connection failed:
+2025-12-07 14:54:11 [error]: Stack:
+2025-12-07 14:54:11 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:16 [error]: ❌ Database connection failed:
+2025-12-07 14:54:16 [error]: Stack:
+2025-12-07 14:54:16 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:22 [error]: ❌ Database connection failed:
+2025-12-07 14:54:22 [error]: Stack:
+2025-12-07 14:54:22 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:24 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:54:24 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:54:24 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:54:24 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:54:25 [error]: ❌ Database connection failed:
+2025-12-07 14:54:25 [error]: Stack:
+2025-12-07 14:54:25 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:31 [error]: ❌ Database connection failed:
+2025-12-07 14:54:31 [error]: Stack:
+2025-12-07 14:54:31 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:37 [error]: ❌ Database connection failed:
+2025-12-07 14:54:37 [error]: Stack:
+2025-12-07 14:54:37 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:43 [error]: ❌ Database connection failed:
+2025-12-07 14:54:43 [error]: Stack:
+2025-12-07 14:54:43 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:48 [error]: ❌ Database connection failed:
+2025-12-07 14:54:48 [error]: Stack:
+2025-12-07 14:54:48 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:54:55 [error]: ❌ Database connection failed:
+2025-12-07 14:54:55 [error]: Stack:
+2025-12-07 14:54:55 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:01 [error]: ❌ Database connection failed:
+2025-12-07 14:55:01 [error]: Stack:
+2025-12-07 14:55:01 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:07 [error]: ❌ Database connection failed:
+2025-12-07 14:55:07 [error]: Stack:
+2025-12-07 14:55:07 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:12 [error]: ❌ Database connection failed:
+2025-12-07 14:55:12 [error]: Stack:
+2025-12-07 14:55:12 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:14 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:55:14 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:55:14 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:55:14 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:55:17 [error]: ❌ Database connection failed:
+2025-12-07 14:55:17 [error]: Stack:
+2025-12-07 14:55:17 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:23 [error]: ❌ Database connection failed:
+2025-12-07 14:55:23 [error]: Stack:
+2025-12-07 14:55:23 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:29 [error]: ❌ Database connection failed:
+2025-12-07 14:55:29 [error]: Stack:
+2025-12-07 14:55:29 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:35 [error]: ❌ Database connection failed:
+2025-12-07 14:55:35 [error]: Stack:
+2025-12-07 14:55:35 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:41 [error]: ❌ Database connection failed:
+2025-12-07 14:55:41 [error]: Stack:
+2025-12-07 14:55:41 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:46 [error]: ❌ Database connection failed:
+2025-12-07 14:55:46 [error]: Stack:
+2025-12-07 14:55:46 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:52 [error]: ❌ Database connection failed:
+2025-12-07 14:55:52 [error]: Stack:
+2025-12-07 14:55:52 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:55:58 [error]: ❌ Database connection failed:
+2025-12-07 14:55:58 [error]: Stack:
+2025-12-07 14:55:58 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:04 [error]: ❌ Database connection failed:
+2025-12-07 14:56:04 [error]: Stack:
+2025-12-07 14:56:04 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:06 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:56:06 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:56:06 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:56:06 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:56:08 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:56:08 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:56:08 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:56:08 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:56:09 [error]: ❌ Database connection failed:
+2025-12-07 14:56:09 [error]: Stack:
+2025-12-07 14:56:09 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:15 [error]: ❌ Database connection failed:
+2025-12-07 14:56:15 [error]: Stack:
+2025-12-07 14:56:15 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:21 [error]: ❌ Database connection failed:
+2025-12-07 14:56:21 [error]: Stack:
+2025-12-07 14:56:21 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:27 [error]: ❌ Database connection failed:
+2025-12-07 14:56:27 [error]: Stack:
+2025-12-07 14:56:27 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:36 [error]: ❌ Database connection failed:
+2025-12-07 14:56:36 [error]: Stack:
+2025-12-07 14:56:36 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:56:40 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:56:40 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:56:40 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:56:40 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:56:42 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:56:42 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:56:42 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:56:42 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:56:46 [error]: ❌ Database connection failed:
+2025-12-07 14:56:46 [error]: Stack:
+2025-12-07 14:56:46 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:23 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:57:23 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:57:23 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:57:23 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:57:27 [error]: ❌ Database connection failed:
+2025-12-07 14:57:27 [error]: Stack:
+2025-12-07 14:57:27 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:30 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:57:30 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:57:30 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:57:30 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:57:31 [error]: ❌ Database connection failed:
+2025-12-07 14:57:31 [error]: Stack:
+2025-12-07 14:57:31 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:37 [error]: ❌ Database connection failed:
+2025-12-07 14:57:37 [error]: Stack:
+2025-12-07 14:57:37 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:43 [error]: ❌ Database connection failed:
+2025-12-07 14:57:43 [error]: Stack:
+2025-12-07 14:57:43 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:48 [error]: ❌ Database connection failed:
+2025-12-07 14:57:48 [error]: Stack:
+2025-12-07 14:57:48 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:53 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:57:53 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:57:53 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:57:53 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:57:54 [error]: ❌ Database connection failed:
+2025-12-07 14:57:54 [error]: Stack:
+2025-12-07 14:57:54 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:57:59 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:57:59 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:57:59 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:57:59 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:58:00 [error]: ❌ Database connection failed:
+2025-12-07 14:58:00 [error]: Stack:
+2025-12-07 14:58:00 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:06 [error]: ❌ Database connection failed:
+2025-12-07 14:58:06 [error]: Stack:
+2025-12-07 14:58:06 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:12 [error]: ❌ Database connection failed:
+2025-12-07 14:58:12 [error]: Stack:
+2025-12-07 14:58:12 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:18 [error]: ❌ Database connection failed:
+2025-12-07 14:58:18 [error]: Stack:
+2025-12-07 14:58:18 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:24 [error]: ❌ Database connection failed:
+2025-12-07 14:58:24 [error]: Stack:
+2025-12-07 14:58:24 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:30 [error]: ❌ Database connection failed:
+2025-12-07 14:58:30 [error]: Stack:
+2025-12-07 14:58:30 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:36 [error]: ❌ Database connection failed:
+2025-12-07 14:58:36 [error]: Stack:
+2025-12-07 14:58:36 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:42 [error]: ❌ Database connection failed:
+2025-12-07 14:58:42 [error]: Stack:
+2025-12-07 14:58:42 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:48 [error]: ❌ Database connection failed:
+2025-12-07 14:58:48 [error]: Stack:
+2025-12-07 14:58:48 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:58:54 [info]: 🚀 Server running in development mode on port 5000
+2025-12-07 14:58:54 [info]: 📊 Health check: http://localhost:5000/health
+2025-12-07 14:58:54 [info]: 🔗 API Base URL: http://localhost:5000/api/v1
+2025-12-07 14:58:54 [info]: 🔌 Socket.IO ready for real-time connections
+2025-12-07 14:58:55 [error]: ❌ Database connection failed:
+2025-12-07 14:58:55 [error]: Stack:
+2025-12-07 14:58:55 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:01 [error]: ❌ Database connection failed:
+2025-12-07 14:59:01 [error]: Stack:
+2025-12-07 14:59:01 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:07 [error]: ❌ Database connection failed:
+2025-12-07 14:59:07 [error]: Stack:
+2025-12-07 14:59:07 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:08 [warn]: 404 Not Found:
+2025-12-07 14:59:08 [warn]: Client Error: Route not found - GET /favicon.ico
+2025-12-07 14:59:12 [error]: ❌ Database connection failed:
+2025-12-07 14:59:12 [error]: Stack:
+2025-12-07 14:59:12 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:19 [error]: ❌ Database connection failed:
+2025-12-07 14:59:19 [error]: Stack:
+2025-12-07 14:59:19 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:28 [error]: ❌ Database connection failed:
+2025-12-07 14:59:28 [error]: Stack:
+2025-12-07 14:59:28 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:36 [error]: ❌ Database connection failed:
+2025-12-07 14:59:36 [error]: Stack:
+2025-12-07 14:59:36 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:43 [error]: ❌ Database connection failed:
+2025-12-07 14:59:43 [error]: Stack:
+2025-12-07 14:59:43 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 14:59:55 [error]: ❌ Database connection failed:
+2025-12-07 14:59:55 [error]: Stack:
+2025-12-07 14:59:55 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:07 [error]: ❌ Database connection failed:
+2025-12-07 15:00:07 [error]: Stack:
+2025-12-07 15:00:07 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:14 [error]: ❌ Database connection failed:
+2025-12-07 15:00:14 [error]: Stack:
+2025-12-07 15:00:14 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:20 [error]: ❌ Database connection failed:
+2025-12-07 15:00:20 [error]: Stack:
+2025-12-07 15:00:20 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:26 [error]: ❌ Database connection failed:
+2025-12-07 15:00:26 [error]: Stack:
+2025-12-07 15:00:26 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:32 [error]: ❌ Database connection failed:
+2025-12-07 15:00:32 [error]: Stack:
+2025-12-07 15:00:32 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:38 [error]: ❌ Database connection failed:
+2025-12-07 15:00:38 [error]: Stack:
+2025-12-07 15:00:38 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:44 [error]: ❌ Database connection failed:
+2025-12-07 15:00:44 [error]: Stack:
+2025-12-07 15:00:44 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:51 [error]: ❌ Database connection failed:
+2025-12-07 15:00:51 [error]: Stack:
+2025-12-07 15:00:51 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:00:57 [error]: ❌ Database connection failed:
+2025-12-07 15:00:57 [error]: Stack:
+2025-12-07 15:00:57 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:03 [error]: ❌ Database connection failed:
+2025-12-07 15:01:03 [error]: Stack:
+2025-12-07 15:01:03 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:09 [error]: ❌ Database connection failed:
+2025-12-07 15:01:09 [error]: Stack:
+2025-12-07 15:01:09 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:15 [error]: ❌ Database connection failed:
+2025-12-07 15:01:15 [error]: Stack:
+2025-12-07 15:01:15 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:21 [error]: ❌ Database connection failed:
+2025-12-07 15:01:21 [error]: Stack:
+2025-12-07 15:01:21 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:27 [error]: ❌ Database connection failed:
+2025-12-07 15:01:27 [error]: Stack:
+2025-12-07 15:01:27 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:33 [error]: ❌ Database connection failed:
+2025-12-07 15:01:33 [error]: Stack:
+2025-12-07 15:01:33 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:38 [error]: ❌ Database connection failed:
+2025-12-07 15:01:38 [error]: Stack:
+2025-12-07 15:01:38 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:44 [error]: ❌ Database connection failed:
+2025-12-07 15:01:44 [error]: Stack:
+2025-12-07 15:01:44 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:50 [error]: ❌ Database connection failed:
+2025-12-07 15:01:50 [error]: Stack:
+2025-12-07 15:01:50 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:01:56 [error]: ❌ Database connection failed:
+2025-12-07 15:01:56 [error]: Stack:
+2025-12-07 15:01:56 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:01 [error]: ❌ Database connection failed:
+2025-12-07 15:02:01 [error]: Stack:
+2025-12-07 15:02:01 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:07 [error]: ❌ Database connection failed:
+2025-12-07 15:02:07 [error]: Stack:
+2025-12-07 15:02:07 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:13 [error]: ❌ Database connection failed:
+2025-12-07 15:02:13 [error]: Stack:
+2025-12-07 15:02:13 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:20 [error]: ❌ Database connection failed:
+2025-12-07 15:02:20 [error]: Stack:
+2025-12-07 15:02:20 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:26 [error]: ❌ Database connection failed:
+2025-12-07 15:02:26 [error]: Stack:
+2025-12-07 15:02:26 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:32 [error]: ❌ Database connection failed:
+2025-12-07 15:02:32 [error]: Stack:
+2025-12-07 15:02:32 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:38 [error]: ❌ Database connection failed:
+2025-12-07 15:02:38 [error]: Stack:
+2025-12-07 15:02:38 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:44 [error]: ❌ Database connection failed:
+2025-12-07 15:02:44 [error]: Stack:
+2025-12-07 15:02:44 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:50 [error]: ❌ Database connection failed:
+2025-12-07 15:02:50 [error]: Stack:
+2025-12-07 15:02:50 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:02:56 [error]: ❌ Database connection failed:
+2025-12-07 15:02:56 [error]: Stack:
+2025-12-07 15:02:56 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:02 [error]: ❌ Database connection failed:
+2025-12-07 15:03:02 [error]: Stack:
+2025-12-07 15:03:02 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:08 [error]: ❌ Database connection failed:
+2025-12-07 15:03:08 [error]: Stack:
+2025-12-07 15:03:08 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:14 [error]: ❌ Database connection failed:
+2025-12-07 15:03:14 [error]: Stack:
+2025-12-07 15:03:14 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:20 [error]: ❌ Database connection failed:
+2025-12-07 15:03:20 [error]: Stack:
+2025-12-07 15:03:20 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:25 [error]: ❌ Database connection failed:
+2025-12-07 15:03:25 [error]: Stack:
+2025-12-07 15:03:25 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:31 [error]: ❌ Database connection failed:
+2025-12-07 15:03:31 [error]: Stack:
+2025-12-07 15:03:31 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:37 [error]: ❌ Database connection failed:
+2025-12-07 15:03:37 [error]: Stack:
+2025-12-07 15:03:37 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:43 [error]: ❌ Database connection failed:
+2025-12-07 15:03:43 [error]: Stack:
+2025-12-07 15:03:43 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:49 [error]: ❌ Database connection failed:
+2025-12-07 15:03:49 [error]: Stack:
+2025-12-07 15:03:49 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:03:55 [error]: ❌ Database connection failed:
+2025-12-07 15:03:55 [error]: Stack:
+2025-12-07 15:03:55 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:01 [error]: ❌ Database connection failed:
+2025-12-07 15:04:01 [error]: Stack:
+2025-12-07 15:04:01 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:06 [error]: ❌ Database connection failed:
+2025-12-07 15:04:06 [error]: Stack:
+2025-12-07 15:04:06 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:12 [error]: ❌ Database connection failed:
+2025-12-07 15:04:12 [error]: Stack:
+2025-12-07 15:04:12 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:18 [error]: ❌ Database connection failed:
+2025-12-07 15:04:18 [error]: Stack:
+2025-12-07 15:04:18 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:24 [error]: ❌ Database connection failed:
+2025-12-07 15:04:24 [error]: Stack:
+2025-12-07 15:04:24 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:30 [error]: ❌ Database connection failed:
+2025-12-07 15:04:30 [error]: Stack:
+2025-12-07 15:04:30 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:35 [error]: ❌ Database connection failed:
+2025-12-07 15:04:35 [error]: Stack:
+2025-12-07 15:04:35 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:42 [error]: ❌ Database connection failed:
+2025-12-07 15:04:42 [error]: Stack:
+2025-12-07 15:04:42 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:48 [error]: ❌ Database connection failed:
+2025-12-07 15:04:48 [error]: Stack:
+2025-12-07 15:04:48 [info]: ⏳ Retrying connection in 5 seconds...
+2025-12-07 15:04:54 [error]: ❌ Database connection failed:
+2025-12-07 15:04:54 [error]: Stack:
+2025-12-07 15:04:54 [info]: ⏳ Retrying connection in 5 seconds...

@@ -1,0 +1,112 @@
+2025-12-05 09:26:36 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:30:03 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:30:29 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:30:57 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:31:10 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- d:\Hotel_Mangement\Backend\src\app.js
+- d:\Hotel_Mangement\Backend\Server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (d:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:31:51 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:32:59 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2025-12-05 09:33:02 [error]: Error: Cannot find module './src/routes/authRoutes'
+Require stack:
+- D:\Hotel_Mangement\Backend\src\app.js
+- D:\Hotel_Mangement\Backend\server.js
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+    at require (node:internal/modules/helpers:147:16)
+    at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
