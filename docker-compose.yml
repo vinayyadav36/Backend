@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+    restart: unless-stopped
+
+  ml-service:
+    build: ./apps/ml-service
+    ports:
+      - '8000:8000'
+    restart: unless-stopped
+
+  api:
+    build: .
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/hotel_management
+      - REDIS_URL=redis://redis:6379
+      - ML_SERVICE_URL=http://ml-service:8000
+    depends_on:
+      - mongodb
+      - redis
+      - ml-service
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
