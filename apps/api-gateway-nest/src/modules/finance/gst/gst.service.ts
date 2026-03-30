@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as PDFDocument from 'pdfkit';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { DriveService } from '../../reports/integrations/drive.service';
 
 @Injectable()
@@ -46,21 +46,31 @@ export class GstService {
   }
 
   async generateInvoiceExcel(invoice: any): Promise<string> {
-    const data = [
-      { Field: 'Invoice Number', Value: invoice.invoiceNumber },
-      { Field: 'Customer ID',   Value: invoice.customerId },
-      { Field: 'Issue Date',    Value: invoice.issueDate },
-      { Field: 'Due Date',      Value: invoice.dueDate },
-      { Field: 'Subtotal',      Value: invoice.subtotal },
-      { Field: 'GST Total',     Value: invoice.taxTotal },
-      { Field: 'Grand Total',   Value: invoice.total },
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet('GST Invoice');
+
+    ws.columns = [
+      { header: 'Field', key: 'field', width: 20 },
+      { header: 'Value', key: 'value', width: 30 },
     ];
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'GST Invoice');
+    const rows = [
+      { field: 'Invoice Number', value: invoice.invoiceNumber },
+      { field: 'Customer ID',   value: invoice.customerId },
+      { field: 'Issue Date',    value: invoice.issueDate },
+      { field: 'Due Date',      value: invoice.dueDate },
+      { field: 'Subtotal',      value: invoice.subtotal },
+      { field: 'GST Total',     value: invoice.taxTotal },
+      { field: 'Grand Total',   value: invoice.total },
+    ];
+
+    rows.forEach((r) => ws.addRow(r));
+
+    // Bold the header row
+    ws.getRow(1).font = { bold: true };
+
     const filePath = path.join('/tmp', `invoice-${invoice.invoiceNumber ?? Date.now()}.xlsx`);
-    XLSX.writeFile(wb, filePath);
+    await wb.xlsx.writeFile(filePath);
     return filePath;
   }
 
