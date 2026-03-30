@@ -52,6 +52,70 @@
 
 ---
 
+## 💰 Finance Brain (CFO-level precision)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/finance/forecast` | Cash-flow forecast — ARIMA → Prophet → MA, with liquidity warning |
+| POST | `/finance/reconcile` | ML reconciliation match → saved to `pending_tasks` (human approval required) |
+| POST | `/finance/variance` | Budget vs actual variance alerts (configurable threshold) |
+
+---
+
+## 📣 Marketing Brain (CMO-level creativity)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/marketing/funnel` | Lead → conversion funnel drop-off analysis |
+| POST | `/marketing/cac-ltv` | Customer Acquisition Cost vs Lifetime Value |
+| POST | `/marketing/forecast` | Campaign ROI prediction before launch |
+| POST | `/marketing/sentiment` | NLP sentiment analysis (VADER → TextBlob → keyword) |
+| POST | `/marketing/segment` | K-means audience segmentation |
+| POST | `/marketing/budget-reallocation` | Shift spend to highest-ROI channels |
+
+---
+
+## 💼 Sales Brain (CRO-level persuasion)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/sales/lead-score` | XGBoost lead scoring — HOT/WARM/COLD |
+| POST | `/sales/pipeline` | Pipeline deal-closure probability + weighted forecast |
+| POST | `/sales/pricing` | Dynamic pricing (demand + inventory + competitor) |
+| POST | `/sales/contract` | GST-compliant smart contract generation (SHA-256 logged) |
+
+---
+
+## ⚙️ Operations Brain (COO-level efficiency)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/operations/inventory` | EOQ-based inventory optimisation + cross-dept signals |
+| POST | `/operations/vendor-leadtime` | Vendor delivery risk scoring + alternate supplier alerts |
+| POST | `/operations/sla` | SLA breach detection + CSAT estimate |
+| POST | `/operations/restock` | Trigger restock workflow → saved to `pending_tasks` |
+
+---
+
+## 🌐 Enterprise Super-Agent (IQ + EQ + AQ)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/super-agent/dashboard` | **All four brains** — unified executive KPIs + boardroom alerts |
+| POST | `/super-agent/scenario` | **What-if simulation** — base, optimistic, pessimistic, stress_test |
+
+### Dashboard Request Schema
+```json
+{
+  "finance":    { "history": [{"ds":"2024-01-01","y":50000}], "scenario":"base", "budget":[], "actual":[] },
+  "marketing":  { "leads": [], "cac_ltv_data": {}, "feedback_texts": [] },
+  "sales":      { "deals": [], "leads": [] },
+  "operations": { "inventory": [], "vendors": [], "tickets": [] }
+}
+```
+
+---
+
 ## 🔄 Automation (Temporal / Workflows)
 
 | Method | Path | Description |

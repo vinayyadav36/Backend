@@ -19,6 +19,12 @@ import { AuditModule } from './common/audit/audit.module';
 import { ComplianceModule } from './common/compliance/compliance.module';
 import { MlBridgeModule } from './ml-bridge/ml-bridge.module';
 
+// ── Brain Modules (Enterprise Super-Agent) ───────────────────────────────────
+import { MarketingModule } from './modules/marketing/marketing.module';
+import { SalesModule } from './modules/sales/sales.module';
+import { OperationsModule } from './modules/operations/operations.module';
+import { SuperAgentModule } from './modules/super-agent/super-agent.module';
+
 import { ImmutableAuditLog } from './common/audit/entities/immutable-audit.entity';
 import { Consent } from './common/compliance/entities/consent.entity';
 
@@ -66,6 +72,12 @@ import { Consent } from './common/compliance/entities/consent.entity';
     WorkerModule,
     WorkflowsModule,
     MlBridgeModule,
+
+    // ── Enterprise Super-Agent Brain Modules ─────────────────────────────────
+    MarketingModule,
+    SalesModule,
+    OperationsModule,
+    SuperAgentModule,
 
     // ── Cross-cutting modules ────────────────────────────────────────────────
     AuditModule,
