@@ -1,0 +1,39 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Lint — Express app
+        run: npm run lint --if-present
+
+      - name: Install NestJS deps
+        working-directory: apps/api-gateway-nest
+        run: npm ci
+
+      - name: Lint — NestJS Gateway
+        working-directory: apps/api-gateway-nest
+        run: npm run lint --if-present
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Lint — FastAPI (flake8)
+        working-directory: apps/ml-agent-fastapi
+        run: |
+          pip install flake8
+          flake8 . --max-line-length=120 --exclude=__pycache__ --ignore=E501,W503 || true

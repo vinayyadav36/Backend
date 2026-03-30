@@ -1,0 +1,15 @@
+GST INVOICE
+===========
+Invoice Number : {{invoiceNumber}}
+Customer       : {{customerId}}
+Issue Date     : {{issueDate}}
+Due Date       : {{dueDate}}
+
+Line Items:
+{{#each lineItems}}
+  - {{this.name}} | Qty: {{this.qty}} | Rate: ₹{{this.price}}
+{{/each}}
+
+Subtotal   : ₹{{subtotal}}
+GST Total  : ₹{{taxTotal}}
+Grand Total: ₹{{total}}

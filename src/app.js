@@ -29,6 +29,16 @@ const roomRoutes = require('./routes/roomRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 
+// Jarvis: new platform routes (Deliverables B-F)
+const ledgerRoutes = require('./routes/ledgerRoutes');
+const jarvisRoutes = require('./routes/jarvisRoutes');
+const reportsRoutes = require('./routes/reportsRoutes');
+const reconcileRoutes = require('./routes/reconcileRoutes');
+const pdfRoutes = require('./routes/pdfRoutes');
+
+// Jarvis: audit middleware (Deliverable F)
+const auditMiddleware = require('./middlewares/auditMiddleware');
+
 // Initialize Express app
 const app = express();
 const server = createServer(app);
@@ -276,7 +286,7 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'x-tenant-id'],
   exposedHeaders: ['X-Total-Count', 'X-Page', 'X-Per-Page'],
   maxAge: 86400, // 24 hours
 };
@@ -365,6 +375,13 @@ app.use(`/api/${apiVersion}/bookings`, apiLimiter, bookingRoutes);
 app.use(`/api/${apiVersion}/rooms`, apiLimiter, roomRoutes);
 app.use(`/api/${apiVersion}/invoices`, apiLimiter, invoiceRoutes);
 app.use(`/api/${apiVersion}/analytics`, apiLimiter, analyticsRoutes);
+
+// ── Jarvis Platform Routes (Deliverables B-F) ─────────────────────────────
+app.use(`/api/${apiVersion}/ledger`, apiLimiter, auditMiddleware, ledgerRoutes);
+app.use(`/api/${apiVersion}/jarvis`, apiLimiter, jarvisRoutes);
+app.use(`/api/${apiVersion}/reports`, apiLimiter, reportsRoutes);
+app.use(`/api/${apiVersion}/reconcile`, apiLimiter, auditMiddleware, reconcileRoutes);
+app.use(`/api/${apiVersion}/pdf`, apiLimiter, pdfRoutes);
 
 // ==========================================
 // ERROR HANDLING MIDDLEWARE

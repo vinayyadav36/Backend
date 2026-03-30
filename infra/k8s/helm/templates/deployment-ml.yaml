@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mlAgent.name }}
+  labels:
+    app: {{ .Values.mlAgent.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mlAgent.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mlAgent.name }}
+    spec:
+      containers:
+        - name: ml-agent
+          image: "{{ .Values.image.repository }}/ml-agent:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.mlAgent.port }}
+          envFrom:
+            - secretRef:
+                name: backend-secrets
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.mlAgent.port }}
+            initialDelaySeconds: 60
+            periodSeconds: 15

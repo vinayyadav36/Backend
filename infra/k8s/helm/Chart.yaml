@@ -1,0 +1,6 @@
+apiVersion: v2
+name: backend-suite
+description: Unified Jarvis backend — API Gateway, ML Agent, Worker services
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

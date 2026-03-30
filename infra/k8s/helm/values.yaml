@@ -1,0 +1,48 @@
+replicaCount: 2
+
+image:
+  repository: myregistry.azurecr.io
+  tag: latest
+  pullPolicy: Always
+
+apiGateway:
+  name: api-gateway
+  port: 3000
+
+mlAgent:
+  name: ml-agent
+  port: 8000
+
+worker:
+  name: worker-service
+  port: 4000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  hosts:
+    - host: api.jarvis.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: jarvis-tls
+      hosts:
+        - api.jarvis.example.com
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "1"
+    memory: "1Gi"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70

@@ -1,0 +1,15 @@
+{
+  "name": "@libs/common",
+  "version": "1.0.0",
+  "description": "Shared NestJS middleware, guards, and utilities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint 'src/**/*.ts'"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "reflect-metadata": "^0.1.13"
+  }
+}

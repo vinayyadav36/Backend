@@ -1,0 +1,64 @@
+// libs/db/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model JournalEntry {
+  id              String    @id @default(uuid())
+  tenantId        String    @map("tenant_id")
+  timestamp       DateTime  @default(now())
+  debitAccountId  String    @map("debit_account_id")
+  creditAccountId String    @map("credit_account_id")
+  amount          Decimal   @db.Decimal(12, 2)
+  currency        String    @default("INR")
+  narration       String?
+  sourceType      String?   @map("source_type")
+  sourceId        String?   @map("source_id")
+  gstRate         Decimal?  @map("gst_rate") @db.Decimal(5, 2)
+  taxAmount       Decimal?  @map("tax_amount") @db.Decimal(12, 2)
+  immutableHash   String    @map("immutable_hash")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@index([tenantId, timestamp])
+  @@map("journal_entries")
+}
+
+model Invoice {
+  id            String   @id @default(uuid())
+  tenantId      String   @map("tenant_id")
+  invoiceNumber String   @unique @map("invoice_number")
+  customerId    String   @map("customer_id")
+  issueDate     DateTime @map("issue_date")
+  dueDate       DateTime @map("due_date")
+  lineItems     Json     @map("line_items")
+  subtotal      Decimal  @db.Decimal(12, 2)
+  taxTotal      Decimal  @map("tax_total") @db.Decimal(12, 2)
+  total         Decimal  @db.Decimal(12, 2)
+  status        String   @default("DRAFT") // DRAFT | SENT | PAID
+  paymentStatus String   @default("UNPAID") @map("payment_status")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@map("invoices")
+}
+
+/// Helper table populated by NestJS workers for Power BI / budget variance view
+model FinanceMetric {
+  id       String   @id @default(uuid())
+  tenantId String   @map("tenant_id")
+  date     DateTime
+  type     String   // ACTUAL | BUDGET
+  amount   Decimal  @db.Decimal(12, 2)
+  category String?
+
+  @@index([tenantId, date])
+  @@map("finance_metrics")
+}

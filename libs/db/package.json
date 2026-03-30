@@ -1,0 +1,17 @@
+{
+  "name": "@libs/db",
+  "version": "1.0.0",
+  "description": "Prisma client and schema for the Postgres accounting DB",
+  "main": "dist/index.js",
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate": "prisma migrate deploy",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.0.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.0.0"
+  }
+}
