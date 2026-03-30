@@ -1,0 +1,14 @@
+{
+  "name": "@libs/accounting",
+  "version": "1.0.0",
+  "description": "TypeORM entities for double-entry accounting ledger",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "typeorm": "^0.3.0",
+    "reflect-metadata": "^0.1.13"
+  }
+}

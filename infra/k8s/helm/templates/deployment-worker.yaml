@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.worker.name }}
+  labels:
+    app: {{ .Values.worker.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.worker.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.worker.name }}
+    spec:
+      containers:
+        - name: worker-service
+          image: "{{ .Values.image.repository }}/worker-service:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.worker.port }}
+          envFrom:
+            - secretRef:
+                name: backend-secrets
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

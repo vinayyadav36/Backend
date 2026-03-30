@@ -1,0 +1,112 @@
+name: Build · Test · Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jarvis_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install NestJS Gateway dependencies
+        working-directory: apps/api-gateway-nest
+        run: npm ci
+
+      - name: Lint — Express app
+        run: npm run lint --if-present
+
+      - name: Lint — NestJS Gateway
+        working-directory: apps/api-gateway-nest
+        run: npm run lint --if-present
+
+      - name: Test — Express app
+        run: npm test --if-present
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/test
+          JWT_SECRET: test-secret
+
+      - name: Test — NestJS Gateway
+        working-directory: apps/api-gateway-nest
+        run: npm test --if-present
+        env:
+          NODE_ENV: test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_NAME: jarvis_test
+
+      - name: Build — NestJS Gateway Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/api-gateway:${{ github.sha }} \
+            ./apps/api-gateway-nest
+
+      - name: Build — ML Agent Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/ml-agent:${{ github.sha }} \
+            ./apps/ml-agent-fastapi
+
+      - name: Login to Azure
+        if: github.ref == 'refs/heads/main'
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Push images to ACR
+        if: github.ref == 'refs/heads/main'
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/api-gateway:${{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/ml-agent:${{ github.sha }}
+
+      - name: Set AKS context
+        if: github.ref == 'refs/heads/main'
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy via Helm
+        if: github.ref == 'refs/heads/main'
+        run: |
+          helm upgrade --install backend-suite ./infra/k8s/helm \
+            --namespace backend \
+            --create-namespace \
+            --set image.tag=${{ github.sha }} \
+            --set image.repository=${{ secrets.ACR_LOGIN_SERVER }} \
+            --wait --timeout 5m

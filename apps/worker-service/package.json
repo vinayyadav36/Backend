@@ -1,0 +1,21 @@
+{
+  "name": "worker-service",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main"
+  },
+  "dependencies": {
+    "@temporalio/activity": "^1.8.0",
+    "@temporalio/client": "^1.8.0",
+    "@temporalio/worker": "^1.8.0",
+    "@temporalio/workflow": "^1.8.0",
+    "axios": "^1.6.0",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/pg": "^8.10.0",
+    "typescript": "^5.0.0"
+  }
+}
