@@ -98,6 +98,13 @@ class MafiaEnforcer:
         Rolling restart a deployment to evict stuck or degraded pods.
         Uses kubectl from the pod's service-account token (in-cluster).
         """
+        import re as _re
+        # Validate deployment name to prevent command injection:
+        # K8s names must be lowercase alphanumeric and hyphens only (RFC 1123).
+        if not _re.fullmatch(r"[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]?", deployment_name):
+            return {"action": "K8S_RESTART", "deployment": deployment_name,
+                    "success": False, "detail": "Invalid deployment name — rejected to prevent injection."}
+
         namespace = os.getenv("K8S_NAMESPACE", "backend")
         cmd = [
             "kubectl", "rollout", "restart",
@@ -136,6 +143,10 @@ class MafiaEnforcer:
         self, deployment_name: str, replicas: int
     ) -> Dict[str, Any]:
         """Scale a deployment to a specific replica count (predictive scaling)."""
+        import re as _re
+        if not _re.fullmatch(r"[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]?", deployment_name):
+            return {"action": "K8S_SCALE", "deployment": deployment_name,
+                    "success": False, "detail": "Invalid deployment name — rejected to prevent injection."}
         namespace = os.getenv("K8S_NAMESPACE", "backend")
         cmd = [
             "kubectl", "scale",

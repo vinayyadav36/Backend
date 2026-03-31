@@ -191,9 +191,15 @@ def _upload_to_vault(
 
     except ImportError:
         # azure-storage-blob not installed — save locally for dev
+        # Sanitize blob_name: replace path separators and reject traversal sequences
+        import re as _re
+        safe_filename = _re.sub(r"[^a-zA-Z0-9._\-]", "_", blob_name)
         local_dir = os.getenv("LOCAL_AUDIT_PATH", "/tmp/audit_reports")
         os.makedirs(local_dir, exist_ok=True)
-        local_path = os.path.join(local_dir, blob_name.replace("/", "_"))
+        # Resolve the full path and ensure it stays within local_dir
+        local_path = os.path.realpath(os.path.join(local_dir, safe_filename))
+        if not local_path.startswith(os.path.realpath(local_dir) + os.sep):
+            local_path = os.path.join(local_dir, "fallback_report.pdf")
         with open(local_path, "wb") as f:
             f.write(pdf_bytes)
         return f"file://{local_path}"

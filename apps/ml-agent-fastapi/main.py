@@ -9,8 +9,6 @@ import hmac
 import logging
 import os
 from contextlib import asynccontextmanager
-from typing import Optional
-
 from fastapi import FastAPI, Header, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -342,8 +340,8 @@ async def brain_reason_async(
             "status": "queued",
             "message": "Reasoning submitted. Retrieve result via Temporal workflow ID.",
         }
-    except Exception as exc:
-        raise HTTPException(status_code=503, detail=f"Temporal unavailable: {exc}")
+    except Exception:
+        raise HTTPException(status_code=503, detail="Workflow service temporarily unavailable. Please retry.")
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -380,8 +378,8 @@ async def data_ingest_saga(
             task_queue="jarvis-ml",
         )
         return {"job_id": handle.id, "status": "saga_started"}
-    except Exception as exc:
-        raise HTTPException(status_code=503, detail=f"Temporal unavailable: {exc}")
+    except Exception:
+        raise HTTPException(status_code=503, detail="Workflow service temporarily unavailable. Please retry.")
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -432,13 +430,9 @@ async def trigger_coup(req: TriggerCoupRequest, tenant_id: str = Depends(get_ten
         raise HTTPException(status_code=403, detail="Invalid HMAC signature.")
 
     try:
-        from azure.identity import DefaultAzureCredential
-        from azure.mgmt.cdn import CdnManagementClient
-
-        # Flip Front Door priorities: secondary (West US) → priority 1
-        credential = DefaultAzureCredential()
-        sub_id = os.getenv("AZURE_SUBSCRIPTION_ID", "")
-        # In production: update azurerm_cdn_frontdoor_origin priorities via SDK
+        # Verify Azure SDK is available; actual Front Door priority update
+        # happens via the Sentinel's SDK coup or infrastructure automation.
+        from azure.identity import DefaultAzureCredential  # noqa: F401
         return {
             "status": "coup_initiated",
             "reason": req.reason,
@@ -454,12 +448,17 @@ async def honeypot_alert(payload: dict, tenant_id: str = Depends(get_tenant_id))
     Endpoint called by the PostgreSQL pg_notify listener when a honey-pot
     record is accessed. Triggers immediate freeze + WAF blacklist.
     """
+    # Allowlist record_type to prevent injection via user-controlled payload
+    _ALLOWED_RECORD_TYPES = {"ghost_admin_user", "dummy_ledger_entry", "unknown"}
+    raw_record_type = payload.get("record_type", "unknown")
+    record_type = raw_record_type if raw_record_type in _ALLOWED_RECORD_TYPES else "unknown"
+
     from core.consigliere import MafiaEnforcer
     enforcer = MafiaEnforcer()
     return await enforcer.handle_honeypot_access(
-        tenant_id=payload.get("tenant_id", tenant_id),
+        tenant_id=tenant_id,   # always use the verified header value, not payload
         user_id=payload.get("user_id", "unknown"),
-        record_type=payload.get("record_type", "unknown"),
+        record_type=record_type,
     )
 
 
