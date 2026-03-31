@@ -11,6 +11,7 @@ textblob>=0.18.0
 langchain>=0.2.0
 langchain-mongodb>=0.1.0
 langchain-openai>=0.1.0
+langchain-core>=0.2.0
 pymongo>=4.0.0
 python-dotenv>=1.0.0
 opentelemetry-api>=1.23.0
@@ -20,3 +21,19 @@ opentelemetry-instrumentation-fastapi>=0.44b0
 temporalio>=1.5.0
 azure-identity>=1.15.0
 azure-keyvault-secrets>=4.8.0
+# ── Einstein Brain additions ──────────────────────────────────────────────────
+redis>=5.0.0
+psycopg2-binary>=2.9.0
+pgvector>=0.2.0
+grpcio>=1.62.0
+grpcio-tools>=1.62.0
+# ── Cognitive Router ──────────────────────────────────────────────────────────
+python-magic-bin>=0.4.14; sys_platform == "win32"
+python-magic>=0.4.27; sys_platform != "win32"
+# ── Witness Protection ────────────────────────────────────────────────────────
+reportlab>=4.1.0
+cryptography>=42.0.0
+azure-storage-blob>=12.19.0
+# ── Consigliere (Azure WAF + AKS management) ──────────────────────────────────
+azure-mgmt-cdn>=13.0.0
+azure-mgmt-containerservice>=30.0.0

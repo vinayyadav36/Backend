@@ -1,4 +1,3 @@
-// apps/api-gateway-nest/src/app.module.ts
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
@@ -24,6 +23,9 @@ import { MarketingModule } from './modules/marketing/marketing.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { OperationsModule } from './modules/operations/operations.module';
 import { SuperAgentModule } from './modules/super-agent/super-agent.module';
+
+// ── Einstein Brain + Neural Link ─────────────────────────────────────────────
+import { BrainModule } from './modules/brain/brain.module';
 
 import { ImmutableAuditLog } from './common/audit/entities/immutable-audit.entity';
 import { Consent } from './common/compliance/entities/consent.entity';
@@ -78,6 +80,9 @@ import { Consent } from './common/compliance/entities/consent.entity';
     SalesModule,
     OperationsModule,
     SuperAgentModule,
+
+    // ── Einstein Brain + gRPC Neural Link + Advisor + Consigliere ────────────
+    BrainModule,
 
     // ── Cross-cutting modules ────────────────────────────────────────────────
     AuditModule,

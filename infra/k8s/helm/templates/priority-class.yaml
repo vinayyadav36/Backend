@@ -1,0 +1,31 @@
+# infra/k8s/helm/templates/priority-class.yaml
+# Kubernetes Priority Classes — ensure the Einstein Brain and Sentinel
+# can evict non-critical background pods when they need more CPU/RAM.
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: jarvis-critical
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+value: 1000000
+globalDefault: false
+description: "Critical Jarvis services (Sentinel, Brain, API Gateway) — evict all others first."
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: jarvis-high
+value: 100000
+globalDefault: false
+description: "High-priority Jarvis services (ML Agent, Worker)."
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: jarvis-low
+value: 1000
+globalDefault: true
+description: "Background and non-critical tasks — evicted first under memory pressure."

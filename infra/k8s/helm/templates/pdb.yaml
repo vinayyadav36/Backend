@@ -1,0 +1,20 @@
+# infra/k8s/helm/templates/pdb.yaml
+# Pod Disruption Budget — ensures AKS never kills too many pods during
+# rolling updates or node drain operations, maintaining 99.99% availability.
+{{- range list "api-gateway" "ml-agent" "worker-service" }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ . }}-pdb
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ . }}
+    chart: {{ $.Chart.Name }}-{{ $.Chart.Version }}
+spec:
+  # Keep at least 1 pod alive at all times during disruptions
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: {{ . }}
+{{- end }}

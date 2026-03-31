@@ -148,3 +148,65 @@ class DashboardRequest(BaseModel):
 class ScenarioRequest(BaseModel):
     base_payload: DashboardRequest
     scenarios: List[str] = ["base", "optimistic", "pessimistic"]
+
+
+# ── Einstein Brain ────────────────────────────────────────────────────────────
+
+class BrainReasonRequest(BaseModel):
+    prompt: str
+    metadata: Optional[Dict[str, str]] = None
+
+
+class BrainReasonResponse(BaseModel):
+    tenant_id: str
+    prompt: str
+    decision: str
+    intercepted: bool
+    pending_task_id: Optional[str] = None
+    audit_hash: str
+    confidence_score: float
+    timestamp: str
+
+
+class BrainAsyncReasonRequest(BaseModel):
+    prompt: str
+    metadata: Optional[Dict[str, str]] = None
+
+
+class BrainAsyncReasonResponse(BaseModel):
+    job_id: str
+    tenant_id: str
+    status: str = "queued"
+    message: str = "Reasoning submitted. Poll /brain/reason/status/{job_id} for result."
+
+
+# ── Cognitive Router ──────────────────────────────────────────────────────────
+
+class DataRouteRequest(BaseModel):
+    raw_data: Any
+    metadata: Dict[str, Any] = {}
+
+
+# ── Advisor ───────────────────────────────────────────────────────────────────
+
+class AdvisorBriefRequest(BaseModel):
+    tenant_id: Optional[str] = None   # override header value if provided
+
+
+# ── Consigliere / Enforcement ─────────────────────────────────────────────────
+
+class EnforceRequest(BaseModel):
+    metrics: Dict[str, Any]
+
+
+class TriggerCoupRequest(BaseModel):
+    hmac_signature: str   # HMAC-SHA256 of payload; verified server-side
+    reason: str = "manual_failover"
+
+
+class WitnessReportRequest(BaseModel):
+    capital: float = 0.0
+    attacks: int = 0
+    shredded_gb: float = 0.0
+    suggestions_applied: int = 0
+    public_key_pem: Optional[str] = None
