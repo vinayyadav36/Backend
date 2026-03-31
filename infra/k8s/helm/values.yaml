@@ -8,14 +8,18 @@ image:
 apiGateway:
   name: api-gateway
   port: 3000
+  priorityClassName: jarvis-critical
 
 mlAgent:
   name: ml-agent
   port: 8000
+  grpcPort: 50051
+  priorityClassName: jarvis-high
 
 worker:
   name: worker-service
   port: 4000
+  priorityClassName: jarvis-high
 
 ingress:
   enabled: true
@@ -23,6 +27,10 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    # Internal load balancer — no public IP on AKS nodes
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    # cert-manager auto-renews TLS — no manual certificate management
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
   hosts:
     - host: api.jarvis.example.com
       paths:
@@ -46,3 +54,17 @@ autoscaling:
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
+
+# Pod Disruption Budget (rendered in templates/pdb.yaml)
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# gRPC Neural Link
+grpc:
+  enabled: true
+  port: 50051
+  tls:
+    enabled: false   # set true in production with cert paths
+    certSecretName: grpc-tls-secret
+

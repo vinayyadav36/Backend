@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jarvis-sentinel
+  labels:
+    app: jarvis-sentinel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jarvis-sentinel
+  template:
+    metadata:
+      labels:
+        app: jarvis-sentinel
+    spec:
+      # Priority: Sentinel must survive even if cluster is under memory pressure
+      priorityClassName: jarvis-critical
+      containers:
+        - name: sentinel
+          image: python:3.11-slim
+          command: ["python", "/app/heartbeat_enforcer.py"]
+          env:
+            - name: PRIMARY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sentinel-secrets
+                  key: PRIMARY_URL
+            - name: SECONDARY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sentinel-secrets
+                  key: SECONDARY_URL
+            - name: BRAIN_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sentinel-secrets
+                  key: BRAIN_API_URL
+            - name: COUP_HMAC_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sentinel-secrets
+                  key: COUP_HMAC_SECRET
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: sentinel-code
+              mountPath: /app
+      volumes:
+        - name: sentinel-code
+          configMap:
+            name: sentinel-code

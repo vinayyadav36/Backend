@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package jarvis.v1;
+
+// The Einstein Brain Service — high-performance binary transport between
+// the NestJS API Gateway and the FastAPI ML Agent.
+service BrainService {
+  // Unary RPC: synchronous reasoning for quick decisions
+  rpc Reason (ReasonRequest) returns (ReasonResponse);
+
+  // Server-side streaming: multi-step thought pipeline with progress updates
+  rpc StreamThought (ReasonRequest) returns (stream ThoughtUpdate);
+}
+
+// ── Request ────────────────────────────────────────────────────────────────
+
+message ReasonRequest {
+  string tenant_id = 1;              // Strict multi-tenant isolation
+  string user_id   = 2;              // Caller identity for audit trail
+  string prompt    = 3;              // The instruction/question
+  map<string, string> metadata = 4;  // Extra context (ledger IDs, session, etc.)
+}
+
+// ── Unary Response ─────────────────────────────────────────────────────────
+
+message ReasonResponse {
+  string decision        = 1;  // Final answer from the Brain
+  string audit_hash      = 2;  // SHA-256 for the immutable audit log
+  float  confidence_score = 3; // Einstein's certainty (0.0–1.0)
+  bool   intercepted     = 4;  // True if output was routed to pending_tasks
+  string pending_task_id = 5;  // Populated when intercepted = true
+}
+
+// ── Streaming Response ─────────────────────────────────────────────────────
+
+message ThoughtUpdate {
+  string step_description = 1;  // "Consulting Ledger…", "Analysing Trends…"
+  int32  progress_percent = 2;  // 0–100
+  string partial_result   = 3;  // Optional intermediate output
+}
