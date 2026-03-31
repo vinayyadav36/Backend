@@ -312,8 +312,9 @@ async def brain_reason_sync(
     try:
         brain = JarvisBrain(tenant_id=tenant_id)
         return await brain.decide(req.prompt)
-    except ValueError as exc:
-        raise HTTPException(status_code=403, detail=str(exc))
+    except ValueError:
+        # Return a safe generic message — never expose internal exception details
+        raise HTTPException(status_code=403, detail="Request rejected: security policy violation.")
 
 
 @app.post("/brain/reason/async")
@@ -409,8 +410,9 @@ async def ops_enforce(req: EnforceRequest, tenant_id: str = Depends(get_tenant_i
     """
     from core.consigliere import MafiaEnforcer
     enforcer = MafiaEnforcer()
-    results = await enforcer.enforce_efficiency(req.metrics)
-    return {"tenant_id": tenant_id, "enforcement_actions": results}
+    await enforcer.enforce_efficiency(req.metrics)
+    # Return only safe status info — never echo user-provided metrics values back
+    return {"tenant_id": tenant_id, "status": "enforcement_cycle_complete"}
 
 
 @app.post("/ops/trigger-coup")
@@ -455,11 +457,13 @@ async def honeypot_alert(payload: dict, tenant_id: str = Depends(get_tenant_id))
 
     from core.consigliere import MafiaEnforcer
     enforcer = MafiaEnforcer()
-    return await enforcer.handle_honeypot_access(
+    await enforcer.handle_honeypot_access(
         tenant_id=tenant_id,   # always use the verified header value, not payload
         user_id=payload.get("user_id", "unknown"),
         record_type=record_type,
     )
+    # Return a safe fixed status — never echo back user-supplied payload fields
+    return {"status": "honeypot_alert_processed"}
 
 
 # ═════════════════════════════════════════════════════════════════════════════

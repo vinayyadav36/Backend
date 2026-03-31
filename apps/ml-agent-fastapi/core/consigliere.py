@@ -96,19 +96,32 @@ class MafiaEnforcer:
     async def trigger_k8s_restart(self, deployment_name: str) -> Dict[str, Any]:
         """
         Rolling restart a deployment to evict stuck or degraded pods.
-        Uses kubectl from the pod's service-account token (in-cluster).
+        Only deployments listed in ALLOWED_K8S_DEPLOYMENTS (env var) may be restarted.
+        The command argument is always taken from the allowlist, never directly from input.
         """
-        import re as _re
-        # Validate deployment name to prevent command injection:
-        # K8s names must be lowercase alphanumeric and hyphens only (RFC 1123).
-        if not _re.fullmatch(r"[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]?", deployment_name):
-            return {"action": "K8S_RESTART", "deployment": deployment_name,
-                    "success": False, "detail": "Invalid deployment name — rejected to prevent injection."}
-
+        # Build allowlist from environment — the string that enters the command
+        # is always sourced from this env-configured set, not from user input.
+        allowed: frozenset = frozenset(
+            name.strip()
+            for name in os.getenv(
+                "ALLOWED_K8S_DEPLOYMENTS", "api-gateway,ml-agent,worker-service"
+            ).split(",")
+            if name.strip()
+        )
+        # Look up the validated name from the allowlist
+        matched = {name for name in allowed if name == deployment_name}
+        if not matched:
+            return {
+                "action": "K8S_RESTART", "deployment": "[REDACTED]",
+                "success": False,
+                "detail": "Deployment not in ALLOWED_K8S_DEPLOYMENTS — restart rejected.",
+            }
+        # Use the name from the allowlist, not the original user-supplied string
+        safe_deployment = matched.pop()
         namespace = os.getenv("K8S_NAMESPACE", "backend")
         cmd = [
             "kubectl", "rollout", "restart",
-            f"deployment/{deployment_name}",
+            f"deployment/{safe_deployment}",
             "-n", namespace,
         ]
         try:
@@ -143,10 +156,21 @@ class MafiaEnforcer:
         self, deployment_name: str, replicas: int
     ) -> Dict[str, Any]:
         """Scale a deployment to a specific replica count (predictive scaling)."""
-        import re as _re
-        if not _re.fullmatch(r"[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]?", deployment_name):
-            return {"action": "K8S_SCALE", "deployment": deployment_name,
-                    "success": False, "detail": "Invalid deployment name — rejected to prevent injection."}
+        allowed: frozenset = frozenset(
+            name.strip()
+            for name in os.getenv(
+                "ALLOWED_K8S_DEPLOYMENTS", "api-gateway,ml-agent,worker-service"
+            ).split(",")
+            if name.strip()
+        )
+        matched = {name for name in allowed if name == deployment_name}
+        if not matched:
+            return {
+                "action": "K8S_SCALE", "deployment": "[REDACTED]",
+                "success": False,
+                "detail": "Deployment not in ALLOWED_K8S_DEPLOYMENTS — scale rejected.",
+            }
+        safe_deployment = matched.pop()
         namespace = os.getenv("K8S_NAMESPACE", "backend")
         cmd = [
             "kubectl", "scale",
