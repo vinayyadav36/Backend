@@ -51,8 +51,10 @@ services:
       REDIS_URL: redis://redis:6379
       ML_SERVICE_URL: http://ml-agent:8000
     depends_on:
-      - mongodb
-      - redis
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_started
     restart: unless-stopped
 
   # ── NestJS API Gateway (Jarvis) ───────────────────────────────────────────
@@ -93,8 +95,10 @@ services:
       REDIS_URL: redis://redis:6379
       TEMPORAL_ADDRESS: temporal:7233
     depends_on:
-      - redis
-      - mongodb
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_healthy
     env_file: .env
     restart: unless-stopped
 

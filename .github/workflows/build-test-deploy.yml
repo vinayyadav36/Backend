@@ -24,6 +24,15 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
+      mongodb:
+        image: mongo:7
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd="mongosh --eval \"db.adminCommand('ping')\""
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,6 +75,13 @@ jobs:
           DB_PASSWORD: postgres
           DB_NAME: jarvis_test
 
+      - name: Build — Express API Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/api:${{ github.sha }} \
+            .
+
       - name: Build — NestJS Gateway Docker image
         if: github.ref == 'refs/heads/main'
         run: |
@@ -80,6 +96,13 @@ jobs:
             -t ${{ secrets.ACR_LOGIN_SERVER }}/ml-agent:${{ github.sha }} \
             ./apps/ml-agent-fastapi
 
+      - name: Build — Worker Service Docker image
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/worker-service:${{ github.sha }} \
+            ./apps/worker-service
+
       - name: Login to Azure
         if: github.ref == 'refs/heads/main'
         uses: azure/login@v2
@@ -90,8 +113,10 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           az acr login --name ${{ secrets.ACR_NAME }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/api:${{ github.sha }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/api-gateway:${{ github.sha }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/ml-agent:${{ github.sha }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/worker-service:${{ github.sha }}
 
       - name: Set AKS context
         if: github.ref == 'refs/heads/main'
@@ -109,4 +134,7 @@ jobs:
             --create-namespace \
             --set image.tag=${{ github.sha }} \
             --set image.repository=${{ secrets.ACR_LOGIN_SERVER }} \
+            --set secrets.dbPassword=${{ secrets.DB_PASSWORD }} \
+            --set secrets.jwtSecret=${{ secrets.JWT_SECRET }} \
+            --set secrets.jwtRefreshSecret=${{ secrets.JWT_REFRESH_SECRET }} \
             --wait --timeout 5m
