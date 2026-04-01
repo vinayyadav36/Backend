@@ -14,6 +14,7 @@ spec:
       labels:
         app: {{ .Values.worker.name }}
     spec:
+      priorityClassName: {{ .Values.worker.priorityClassName }}
       containers:
         - name: worker-service
           image: "{{ .Values.image.repository }}/worker-service:{{ .Values.image.tag }}"

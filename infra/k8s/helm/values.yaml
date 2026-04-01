@@ -5,6 +5,25 @@ image:
   tag: latest
   pullPolicy: Always
 
+# Secret values — override at deploy time via:
+#   helm upgrade --set secrets.dbPassword=... --set secrets.jwtSecret=... --set secrets.jwtRefreshSecret=...
+# or supply a values file that is NOT committed to the repository.
+secrets:
+  dbHost: "postgres"
+  dbPort: "5432"
+  dbUser: "postgres"
+  dbPassword: ""           # REQUIRED — set via --set or a private values file
+  dbName: "jarvis_accounting"
+  mongoUri: "mongodb://mongodb:27017/jarvis"
+  jwtSecret: ""            # REQUIRED — set via --set or a private values file
+  jwtExpire: "7d"
+  jwtRefreshSecret: ""     # REQUIRED — set via --set or a private values file
+  jwtRefreshExpire: "30d"
+  mlAgentUrl: "http://ml-agent:8000"
+  temporalAddress: "temporal:7233"
+  redisUrl: "redis://redis:6379"
+  logLevel: "info"
+
 apiGateway:
   name: api-gateway
   port: 3000

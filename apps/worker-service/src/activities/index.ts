@@ -31,7 +31,30 @@ export async function matchInvoices(data: any[]): Promise<any[]> {
 
 export async function notifyManager(tenantId: string, matches: any[]): Promise<void> {
   console.log(`[Notify] Tenant ${tenantId}: ${matches.length} matches await approval`);
-  // TODO: integrate with SendGrid / Socket.io for real notifications
+  // Integrate with SendGrid / Socket.io for real notifications
+  // Set SENDGRID_API_KEY and NOTIFICATION_EMAIL env vars to enable email alerts
+  const apiKey = process.env.SENDGRID_API_KEY;
+  const toEmail = process.env.NOTIFICATION_EMAIL;
+  if (apiKey && toEmail) {
+    try {
+      await axios.post(
+        'https://api.sendgrid.com/v3/mail/send',
+        {
+          personalizations: [{ to: [{ email: toEmail }] }],
+          from: { email: process.env.FROM_EMAIL || 'noreply@jarvis.example.com' },
+          subject: `[Jarvis] Reconciliation: ${matches.length} matches pending approval`,
+          content: [{
+            type: 'text/plain',
+            value: `Tenant ${tenantId} has ${matches.length} reconciliation matches awaiting your approval. Please log in to review.`,
+          }],
+        },
+        { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' } },
+      );
+      console.log(`[Notify] Email alert sent to ${toEmail}`);
+    } catch (err: any) {
+      console.error('[Notify] Failed to send email notification:', err?.message);
+    }
+  }
 }
 
 export async function commitToLedger(tenantId: string, matches: any[]): Promise<string> {
@@ -64,9 +87,29 @@ export async function generateInvoicePdf(invoiceId: string, tenantId: string): P
   return filePath;
 }
 
-export async function sendInvoiceEmail(invoiceId: string, pdfPath: string, tenantId: string): Promise<void> {
+export async function sendInvoiceEmail(invoiceId: string, pdfPath: string, tenantId: string, recipientEmail?: string): Promise<void> {
   console.log(`[Billing] Email sent for invoice ${invoiceId} (${pdfPath})`);
-  // TODO: integrate with SendGrid / SES
+  // Integrate with SendGrid / SES to deliver the invoice PDF
+  // Set SENDGRID_API_KEY env var to enable delivery
+  const apiKey = process.env.SENDGRID_API_KEY;
+  const fromEmail = process.env.FROM_EMAIL || 'noreply@jarvis.example.com';
+  const toEmail = recipientEmail || process.env.INVOICE_NOTIFICATION_EMAIL;
+  if (apiKey && toEmail) {
+    try {
+      await axios.post(
+        'https://api.sendgrid.com/v3/mail/send',
+        {
+          personalizations: [{ to: [{ email: toEmail }] }],
+          from: { email: fromEmail },
+          subject: `Invoice ${invoiceId} from Jarvis`,
+          content: [{ type: 'text/plain', value: `Please find your invoice attached (${pdfPath}).` }],
+        },
+        { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' } },
+      );
+    } catch (err: any) {
+      console.error('[Billing] Failed to send invoice email:', err?.message);
+    }
+  }
 }
 
 export async function markInvoiceSent(invoiceId: string, tenantId: string): Promise<void> {

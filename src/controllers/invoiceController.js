@@ -533,15 +533,81 @@ const generateInvoicePDF = async (req, res) => {
       });
     }
 
-    // TODO: Implement PDF generation with puppeteer or pdfkit
-    // For now, return invoice data
-    logger.info(`Invoice PDF generated: ${req.params.id}`);
+    // Generate PDF using pdfkit
+    const PDFDocument = require('pdfkit');
+    const doc = new PDFDocument({ margin: 50 });
 
-    res.json({
-      success: true,
-      message: 'PDF generation endpoint - to be implemented',
-      data: { invoice }
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="invoice-${invoice.invoiceNumber || invoice._id}.pdf"`
+    );
+    doc.pipe(res);
+
+    // Header
+    doc.fontSize(22).font('Helvetica-Bold').text('INVOICE', { align: 'center' });
+    doc.moveDown(0.5);
+    doc.fontSize(10).font('Helvetica')
+      .text(`Invoice No: ${invoice.invoiceNumber || invoice._id}`, { align: 'right' })
+      .text(`Date: ${new Date(invoice.createdAt).toLocaleDateString('en-IN')}`, { align: 'right' });
+
+    doc.moveDown();
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+    doc.moveDown(0.5);
+
+    // Guest info
+    if (invoice.guest) {
+      doc.fontSize(11).font('Helvetica-Bold').text('Bill To:');
+      doc.fontSize(10).font('Helvetica')
+        .text(invoice.guest.name || '')
+        .text(invoice.guest.email || '')
+        .text(invoice.guest.phone || '')
+        .text(invoice.guest.address || '');
+    }
+
+    // Booking info
+    if (invoice.booking) {
+      doc.moveDown(0.5);
+      doc.fontSize(11).font('Helvetica-Bold').text('Booking:');
+      doc.fontSize(10).font('Helvetica')
+        .text(`Reference: ${invoice.booking.bookingNumber || invoice.booking._id}`)
+        .text(`Check-in:  ${invoice.booking.checkInDate ? new Date(invoice.booking.checkInDate).toLocaleDateString('en-IN') : '-'}`)
+        .text(`Check-out: ${invoice.booking.checkOutDate ? new Date(invoice.booking.checkOutDate).toLocaleDateString('en-IN') : '-'}`);
+    }
+
+    doc.moveDown();
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+    doc.moveDown(0.5);
+
+    // Line items
+    doc.fontSize(11).font('Helvetica-Bold').text('Items:');
+    doc.moveDown(0.3);
+    const items = invoice.items || [];
+    items.forEach((item) => {
+      doc.fontSize(10).font('Helvetica')
+        .text(`${item.description || 'Service'}  x${item.quantity || 1}  @ ₹${(item.rate || 0).toFixed(2)}  =  ₹${(item.amount || 0).toFixed(2)}`);
     });
+
+    doc.moveDown();
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+    doc.moveDown(0.5);
+
+    // Totals
+    const subtotal = invoice.subtotal || 0;
+    const tax = invoice.tax || 0;
+    const total = invoice.total || 0;
+    doc.fontSize(10).font('Helvetica')
+      .text(`Subtotal: ₹${subtotal.toFixed(2)}`, { align: 'right' })
+      .text(`Tax (GST): ₹${tax.toFixed(2)}`, { align: 'right' });
+    doc.fontSize(12).font('Helvetica-Bold')
+      .text(`Total: ₹${total.toFixed(2)}`, { align: 'right' });
+
+    doc.moveDown(2);
+    doc.fontSize(9).font('Helvetica').fillColor('grey')
+      .text('Thank you for your business.', { align: 'center' });
+
+    doc.end();
+    logger.info(`Invoice PDF generated: ${req.params.id}`);
 
   } catch (error) {
     logger.error('Generate invoice PDF error:', {
