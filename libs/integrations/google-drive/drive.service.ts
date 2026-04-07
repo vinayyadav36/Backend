@@ -1,5 +1,6 @@
 // libs/integrations/google-drive/drive.service.ts
 import { Injectable } from '@nestjs/common';
+import * as path from 'path';
 
 /**
  * DriveService
@@ -25,6 +26,11 @@ export class DriveService {
     const { google } = await import('googleapis');
     const { createReadStream } = await import('fs');
 
+    // Validate filePath to prevent path traversal: use only the basename, joined to /tmp
+    const allowedDir = path.resolve('/tmp');
+    const safeFileName = path.basename(filePath); // extract only the filename, dropping any directory component
+    const safePath = path.join(allowedDir, safeFileName); // reconstruct safe path
+
     const auth = new google.auth.GoogleAuth({
       keyFile: process.env.GOOGLE_SA_KEY_PATH,
       scopes: ['https://www.googleapis.com/auth/drive.file'],
@@ -36,7 +42,7 @@ export class DriveService {
 
     const res = await drive.files.create({
       requestBody: { name: fileName, parents: [folderId] },
-      media: { mimeType, body: createReadStream(filePath) },
+      media: { mimeType, body: createReadStream(safePath) },
       fields: 'id, webViewLink',
     });
 

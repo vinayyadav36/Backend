@@ -11,6 +11,7 @@ const { validationResult } = require('express-validator');
 const ExcelJS = require('exceljs');
 const logger = require('../config/logger');
 const mongoose = require('mongoose');
+// sanitize import removed (bookings uses fixed sort)
 
 /**
  * @desc    Get all bookings with filters and pagination
@@ -33,7 +34,7 @@ const getBookings = async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     // Build query
-    let query = {};
+    const query = {};
 
     // Status filter
     if (status && status !== 'all') {
@@ -260,6 +261,14 @@ const createBooking = async (req, res) => {
         success: false,
         message: 'Check-in date cannot be in the past'
       });
+    }
+
+    // Validate guest and room are valid ObjectIds
+    if (!mongoose.Types.ObjectId.isValid(room)) {
+      return res.status(400).json({ success: false, message: 'Invalid room ID' });
+    }
+    if (!mongoose.Types.ObjectId.isValid(guest)) {
+      return res.status(400).json({ success: false, message: 'Invalid guest ID' });
     }
 
     // Check room availability

@@ -9,7 +9,8 @@ const { validationResult } = require('express-validator');
 const ExcelJS = require('exceljs');
 const logger = require('../config/logger');
 const mongoose = require('mongoose');
-const axios = require('axios');
+const _axios = require('axios');
+const { escapeRegex, sanitizeSortField, toSafeString } = require('../utils/sanitize');
 
 /**
  * @desc    Get all guests with filters and pagination
@@ -30,15 +31,16 @@ const getGuests = async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     // Build query
-    let query = {};
+    const query = {};
 
     // Search filter
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
-        { phone: { $regex: search, $options: 'i' } },
-        { idNumber: { $regex: search, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { email: { $regex: safeSearch, $options: 'i' } },
+        { phone: { $regex: safeSearch, $options: 'i' } },
+        { idNumber: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
@@ -49,7 +51,8 @@ const getGuests = async (req, res) => {
 
     // Build sort object
     const sort = {};
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    const safeSortBy = sanitizeSortField(sortBy, 'guests', 'createdAt');
+    sort[safeSortBy] = sortOrder === 'asc' ? 1 : -1;
 
     const guests = await Guest.find(query)
       .sort(sort)
@@ -168,9 +171,12 @@ const createGuest = async (req, res) => {
 
   try {
     const { email, phone, idNumber } = req.body;
+    const safeEmail = toSafeString(email);
+    const safePhone = toSafeString(phone);
+    const safeIdNumber = toSafeString(idNumber);
 
     // Check for duplicate email
-    const existingEmail = await Guest.findOne({ email });
+    const existingEmail = await Guest.findOne({ email: safeEmail });
     if (existingEmail) {
       return res.status(400).json({
         success: false,
@@ -179,8 +185,8 @@ const createGuest = async (req, res) => {
     }
 
     // Check for duplicate phone
-    if (phone) {
-      const existingPhone = await Guest.findOne({ phone });
+    if (safePhone) {
+      const existingPhone = await Guest.findOne({ phone: safePhone });
       if (existingPhone) {
         return res.status(400).json({
           success: false,
@@ -190,8 +196,8 @@ const createGuest = async (req, res) => {
     }
 
     // Check for duplicate ID number
-    if (idNumber) {
-      const existingId = await Guest.findOne({ idNumber });
+    if (safeIdNumber) {
+      const existingId = await Guest.findOne({ idNumber: safeIdNumber });
       if (existingId) {
         return res.status(400).json({
           success: false,
@@ -452,7 +458,7 @@ const initiateDigiLocker = async (req, res) => {
  */
 const digiLockerCallback = async (req, res) => {
   try {
-    const { guestId, code, documents } = req.body;
+    const { guestId, code: _code, documents } = req.body;
 
     if (!guestId) {
       return res.status(400).json({

@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "Server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "Server.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "notes": "Socket.IO has limited support on Vercel serverless functions. For full real-time support, use a dedicated WebSocket server or Vercel Edge Runtime."
+}

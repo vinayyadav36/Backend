@@ -195,7 +195,7 @@ const mongoIdValidation = [
   handleValidationErrors
 ];
 
-const cancelBookingValidation = [
+const _cancelBookingValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid booking ID'),
@@ -252,7 +252,7 @@ const checkOutValidation = [
   handleValidationErrors
 ];
 
-const extraServiceValidation = [
+const _extraServiceValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid booking ID'),
@@ -279,7 +279,7 @@ const extraServiceValidation = [
   handleValidationErrors
 ];
 
-const paymentValidation = [
+const _paymentValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid booking ID'),

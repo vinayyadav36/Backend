@@ -11,7 +11,8 @@ export class GstService {
   constructor(private readonly driveService: DriveService) {}
 
   async generateInvoicePdf(invoice: any): Promise<string> {
-    const filePath = path.join('/tmp', `invoice-${invoice.invoiceNumber ?? Date.now()}.pdf`);
+    const safeInvoiceNumber = String(invoice.invoiceNumber ?? Date.now()).replace(/[^a-zA-Z0-9\-_]/g, '_');
+    const filePath = path.join('/tmp', `invoice-${safeInvoiceNumber}.pdf`);
 
     await new Promise<void>((resolve, reject) => {
       const doc = new PDFDocument({ margin: 50 });

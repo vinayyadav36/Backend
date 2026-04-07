@@ -6,7 +6,7 @@
 
 const Booking = require('../models/Booking');
 const Room = require('../models/Room');
-const Guest = require('../models/Guest');
+const _Guest = require('../models/Guest');
 const Invoice = require('../models/Invoice');
 const logger = require('../config/logger');
 

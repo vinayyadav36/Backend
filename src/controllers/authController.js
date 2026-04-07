@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const logger = require('../config/logger');
+const { sendOtpEmail, sendPasswordResetEmail } = require('../services/emailService');
+const { toSafeString } = require('../utils/sanitize');
 
 /**
  * Generate JWT access and refresh tokens
@@ -55,18 +57,21 @@ const generateOtpCode = () => {
  * @param {string} phone - User phone
  * @param {string} otpCode - OTP code
  */
-const sendOtp = async (email, phone, otpCode) => {
-  // TODO: Implement actual email/SMS service
-  // Example: await emailService.send({ to: email, subject: 'Your OTP', body: otpCode });
-  // Example: await smsService.send({ to: phone, message: `Your OTP: ${otpCode}` });
-  
-  logger.info(`🔐 OTP for ${email}: ${otpCode}`);
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`\n╔════════════════════════════════╗`);
-    console.log(`║  OTP CODE: ${otpCode}           ║`);
-    console.log(`║  Email: ${email.padEnd(20)} ║`);
-    console.log(`╚════════════════════════════════╝\n`);
+const sendOtp = async (email, _phone, otpCode) => {
+  const sent = await sendOtpEmail(email, otpCode);
+  if (!sent) {
+    // Fallback: log OTP in development when email service not configured
+    logger.info(`🔐 OTP for ${email}: ${otpCode}`);
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.log(`\n╔════════════════════════════════╗`);
+      // eslint-disable-next-line no-console
+      console.log(`║  OTP CODE: ${otpCode}           ║`);
+      // eslint-disable-next-line no-console
+      console.log(`║  Email: ${email.padEnd(20)} ║`);
+      // eslint-disable-next-line no-console
+      console.log(`╚════════════════════════════════╝\n`);
+    }
   }
 };
 
@@ -670,6 +675,122 @@ const logout = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Request password reset email
+ * @route   POST /api/v1/auth/forgot-password
+ * @access  Public
+ */
+const requestPasswordReset = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
+
+  const email = toSafeString(req.body.email);
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Valid email is required' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    // Always respond with success to avoid email enumeration
+    if (!user) {
+      return res.json({ success: true, message: 'If that email exists, a reset link has been sent.' });
+    }
+
+    const resetToken = user.generatePasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    await sendPasswordResetEmail(email, resetToken);
+
+    logger.info(`Password reset requested for: ${email}`);
+
+    res.json({ success: true, message: 'If that email exists, a reset link has been sent.' });
+  } catch (error) {
+    logger.error('Request password reset error:', { error: error.message, email });
+    res.status(500).json({ success: false, message: 'Server error during password reset request' });
+  }
+};
+
+/**
+ * @desc    Reset password using token
+ * @route   POST /api/v1/auth/reset-password
+ * @access  Public
+ */
+const resetPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
+
+  const { token, newPassword } = req.body;
+
+  try {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired reset token' });
+    }
+
+    user.password = newPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    user.refreshToken = null;
+    await user.save();
+
+    logger.info(`Password reset completed for: ${user.email}`);
+
+    res.json({ success: true, message: 'Password has been reset successfully. Please log in.' });
+  } catch (error) {
+    logger.error('Reset password error:', { error: error.message });
+    res.status(500).json({ success: false, message: 'Server error during password reset' });
+  }
+};
+
+/**
+ * @desc    Change password for authenticated user
+ * @route   PUT /api/v1/auth/change-password
+ * @access  Private
+ */
+const changePassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
+  }
+
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id).select('+password');
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Current password is incorrect' });
+    }
+
+    user.password = newPassword;
+    user.refreshToken = null;
+    await user.save();
+
+    logger.info(`Password changed for user: ${user.email}`);
+
+    res.json({ success: true, message: 'Password changed successfully. Please log in again.' });
+  } catch (error) {
+    logger.error('Change password error:', { error: error.message, userId: req.user?.id });
+    res.status(500).json({ success: false, message: 'Server error during password change' });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -677,5 +798,8 @@ module.exports = {
   requestOtpLogin,
   getMe,
   refreshToken,
-  logout
+  logout,
+  requestPasswordReset,
+  resetPassword,
+  changePassword,
 };

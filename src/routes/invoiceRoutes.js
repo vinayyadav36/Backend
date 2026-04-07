@@ -182,7 +182,7 @@ const mongoIdValidation = [
   handleValidationErrors
 ];
 
-const paymentValidation = [
+const _paymentValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid invoice ID'),
@@ -206,7 +206,7 @@ const paymentValidation = [
   handleValidationErrors
 ];
 
-const emailInvoiceValidation = [
+const _emailInvoiceValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid invoice ID'),

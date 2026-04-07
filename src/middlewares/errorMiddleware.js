@@ -30,7 +30,7 @@ const notFound = (req, res, next) => {
  * Handles all errors and sends appropriate response
  * @middleware
  */
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
   // Default to 500 if no status code is set
   let statusCode = err.statusCode || res.statusCode || 500;
   if (statusCode === 200) statusCode = 500;

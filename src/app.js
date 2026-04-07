@@ -38,6 +38,7 @@ const pdfRoutes = require('./routes/pdfRoutes');
 
 // Jarvis: audit middleware (Deliverable F)
 const auditMiddleware = require('./middlewares/auditMiddleware');
+const requestId = require('./middlewares/requestIdMiddleware');
 
 // Initialize Express app
 const app = express();
@@ -194,9 +195,24 @@ if (process.env.TRUST_PROXY === 'true') {
 // SECURITY MIDDLEWARE
 // ==========================================
 
+// Request ID - assign unique ID to every request
+app.use(requestId);
+
 // Helmet - Security headers
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
@@ -344,7 +360,7 @@ app.get('/health', (req, res) => {
       used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB',
       total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024) + ' MB',
     },
-    socketConnections: io.engine.clientsCount,
+    socketConnections: io?.engine?.clientsCount ?? 0,
   });
 });
 
