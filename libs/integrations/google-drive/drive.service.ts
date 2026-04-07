@@ -26,10 +26,10 @@ export class DriveService {
     const { google } = await import('googleapis');
     const { createReadStream } = await import('fs');
 
-    // Validate filePath to prevent path traversal: must be a direct child of /tmp
+    // Validate filePath to prevent path traversal: use only the basename, joined to /tmp
     const allowedDir = path.resolve('/tmp');
-    const fileName_ = path.basename(filePath); // extract only the filename, dropping any directory component
-    const safePath = path.join(allowedDir, fileName_); // reconstruct safe path
+    const safeFileName = path.basename(filePath); // extract only the filename, dropping any directory component
+    const safePath = path.join(allowedDir, safeFileName); // reconstruct safe path
 
     const auth = new google.auth.GoogleAuth({
       keyFile: process.env.GOOGLE_SA_KEY_PATH,
