@@ -9,6 +9,7 @@ const Booking = require('../models/Booking');
 const { validationResult } = require('express-validator');
 const logger = require('../config/logger');
 const mongoose = require('mongoose');
+const { escapeRegex, sanitizeSortField } = require('../utils/sanitize');
 
 /**
  * Generate unique invoice number
@@ -53,12 +54,13 @@ const getInvoices = async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     // Build query
-    let query = {};
+    const query = {};
 
     // Search by invoice number
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { invoiceNumber: { $regex: search, $options: 'i' } }
+        { invoiceNumber: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
@@ -81,7 +83,8 @@ const getInvoices = async (req, res) => {
 
     // Build sort object
     const sort = {};
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    const safeSortBy = sanitizeSortField(sortBy, 'invoices', 'createdAt');
+    sort[safeSortBy] = sortOrder === 'asc' ? 1 : -1;
 
     const invoices = await Invoice.find(query)
       .populate('guest', 'name email phone')
@@ -221,6 +224,9 @@ const createInvoice = async (req, res) => {
 
     // Validate booking exists
     if (booking) {
+      if (!mongoose.Types.ObjectId.isValid(booking)) {
+        return res.status(400).json({ success: false, message: 'Invalid booking ID' });
+      }
       const bookingExists = await Booking.findById(booking);
       if (!bookingExists) {
         return res.status(404).json({

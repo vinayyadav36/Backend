@@ -28,7 +28,7 @@ const {
   // getOccupancyReport
 } = require('../controllers/roomController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
-const { uploadMultiple } = require('../middlewares/uploadMiddleware');
+const { _uploadMultiple } = require('../middlewares/uploadMiddleware');
 const { handleValidationErrors } = require('../middlewares/errorMiddleware');
 
 const router = express.Router();
@@ -41,7 +41,7 @@ const roomValidation = [
     .notEmpty().withMessage('Room number is required')
     .isLength({ min: 1, max: 10 })
     .withMessage('Room number must be between 1 and 10 characters')
-    .matches(/^[A-Z0-9\-]+$/)
+    .matches(/^[A-Z0-9-]+$/)
     .withMessage('Room number can only contain uppercase letters, numbers, and hyphens'),
   
   body('type')
@@ -224,7 +224,7 @@ const statusUpdateValidation = [
   handleValidationErrors
 ];
 
-const maintenanceValidation = [
+const _maintenanceValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid room ID'),
@@ -263,7 +263,7 @@ const maintenanceValidation = [
   handleValidationErrors
 ];
 
-const bulkStatusUpdateValidation = [
+const _bulkStatusUpdateValidation = [
   body('roomIds')
     .isArray({ min: 1 })
     .withMessage('Room IDs array is required with at least one ID'),

@@ -2,10 +2,13 @@
   "name": "hotel-management-backend",
   "version": "1.0.0",
   "description": "Hotel Management System Backend API",
-  "main": "server.js",
+  "main": "Server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node Server.js",
+    "dev": "nodemon Server.js",
+    "lint": "eslint src/ --ext .js",
+    "test": "jest --testPathPattern=src/__tests__ --forceExit",
+    "test:ci": "jest --testPathPattern=src/__tests__ --forceExit --ci"
   },
   "dependencies": {
     "axios": "^1.6.8",
@@ -25,11 +28,16 @@
     "mongoose": "^8.3.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.13",
     "pdfkit": "^0.15.0",
     "socket.io": "^4.8.1",
     "winston": "^3.13.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
   }
 }
+

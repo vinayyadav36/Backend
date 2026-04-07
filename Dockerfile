@@ -1,19 +1,18 @@
-FROM node:20-alpine
-
+# Build stage
+FROM node:20-alpine AS deps
 WORKDIR /app
-
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies
 RUN npm ci --only=production
 
-# Copy source code
-COPY . .
-
-# Expose port
+# Production stage
+FROM node:20-alpine AS runner
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs . .
+USER nodejs
 EXPOSE 5000
-
-# Start server
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5000/health', (r) => r.statusCode === 200 ? process.exit(0) : process.exit(1))"
 CMD ["node", "Server.js"]
 

@@ -176,7 +176,7 @@ const searchValidation = [
   handleValidationErrors
 ];
 
-const loyaltyPointsValidation = [
+const _loyaltyPointsValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid guest ID'),
@@ -194,7 +194,7 @@ const loyaltyPointsValidation = [
   handleValidationErrors
 ];
 
-const blacklistValidation = [
+const _blacklistValidation = [
   param('id')
     .isMongoId()
     .withMessage('Invalid guest ID'),

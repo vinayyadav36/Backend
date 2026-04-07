@@ -3,7 +3,7 @@
  * Generates GST-compliant PDF invoices using PDFKit (pure JS, no Chromium).
  */
 const PDFDocument = require('pdfkit');
-const logger = require('../config/logger');
+const _logger = require('../config/logger');
 
 /**
  * Generate a GST invoice PDF buffer.

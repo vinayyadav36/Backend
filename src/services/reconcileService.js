@@ -13,6 +13,7 @@
 const Reconciliation = require('../models/Reconciliation');
 const ledgerService = require('./ledgerService');
 const logger = require('../config/logger');
+const { sanitizeStatus } = require('../utils/sanitize');
 
 /**
  * Naïve AI matcher – groups transactions by sign and pairs them.
@@ -138,7 +139,8 @@ const commit = async (tenantId, workflowId, committedBy) => {
  */
 const list = async (tenantId, { status, page = 1, limit = 20 } = {}) => {
   const query = { tenantId };
-  if (status) query.status = status;
+  const safeStatus = sanitizeStatus(status, ['awaiting_approval', 'approved', 'rejected', 'committed']);
+  if (safeStatus) query.status = safeStatus;
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
   const [workflows, total] = await Promise.all([

@@ -5,7 +5,7 @@
  */
 
 const mongoose = require('mongoose');
-const crypto = require('crypto');
+const _crypto = require('crypto');
 
 const invoiceItemSchema = new mongoose.Schema({
   description: {

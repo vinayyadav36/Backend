@@ -1,5 +1,6 @@
 // libs/integrations/google-drive/drive.service.ts
 import { Injectable } from '@nestjs/common';
+import * as path from 'path';
 
 /**
  * DriveService
@@ -25,6 +26,13 @@ export class DriveService {
     const { google } = await import('googleapis');
     const { createReadStream } = await import('fs');
 
+    // Validate filePath to prevent path traversal
+    const resolvedPath = path.resolve(filePath);
+    const allowedDir = path.resolve('/tmp');
+    if (!resolvedPath.startsWith(allowedDir + path.sep) && resolvedPath !== allowedDir) {
+      throw new Error('Invalid file path: path traversal detected');
+    }
+
     const auth = new google.auth.GoogleAuth({
       keyFile: process.env.GOOGLE_SA_KEY_PATH,
       scopes: ['https://www.googleapis.com/auth/drive.file'],
@@ -36,7 +44,7 @@ export class DriveService {
 
     const res = await drive.files.create({
       requestBody: { name: fileName, parents: [folderId] },
-      media: { mimeType, body: createReadStream(filePath) },
+      media: { mimeType, body: createReadStream(resolvedPath) },
       fields: 'id, webViewLink',
     });
 

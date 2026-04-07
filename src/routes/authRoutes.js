@@ -5,7 +5,7 @@
  */
 
 const express = require('express');
-const { body, query } = require('express-validator');
+const { body } = require('express-validator');
 const {
   register,
   loginWithOtp,
@@ -13,9 +13,12 @@ const {
   getMe,
   refreshToken,
   logout,
-  requestOtpLogin
+  requestOtpLogin,
+  requestPasswordReset,
+  resetPassword,
+  changePassword,
 } = require('../controllers/authController');
-const { protect, optionalAuth } = require('../middlewares/authMiddleware');
+const { protect } = require('../middlewares/authMiddleware');
 const { handleValidationErrors } = require('../middlewares/errorMiddleware');
 
 const router = express.Router();
@@ -155,40 +158,32 @@ const changePasswordValidation = [
   handleValidationErrors
 ];
 
-// FUTURE FEATURES - Not yet implemented
-// const resetPasswordValidation = [
-//   body('token')
-//     .notEmpty().withMessage('Reset token is required'),
-//   
-//   body('newPassword')
-//     .isLength({ min: 8, max: 128 })
-//     .withMessage('Password must be between 8 and 128 characters')
-//     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-//     .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
-//   
-//   body('confirmPassword')
-//     .custom((value, { req }) => value === req.body.newPassword)
-//     .withMessage('Passwords do not match'),
-//   
-//   handleValidationErrors
-// ];
+const resetPasswordValidation = [
+  body('token')
+    .notEmpty().withMessage('Reset token is required'),
 
-// const requestPasswordResetValidation = [
-//   body('email')
-//     .trim()
-//     .notEmpty().withMessage('Email is required')
-//     .isEmail().withMessage('Please provide a valid email')
-//     .normalizeEmail(),
-//   
-//   handleValidationErrors
-// ];
+  body('newPassword')
+    .isLength({ min: 8, max: 128 })
+    .withMessage('Password must be between 8 and 128 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
 
-// const verifyEmailValidation = [
-//   query('token')
-//     .notEmpty().withMessage('Verification token is required'),
-//   
-//   handleValidationErrors
-// ];
+  body('confirmPassword')
+    .custom((value, { req }) => value === req.body.newPassword)
+    .withMessage('Passwords do not match'),
+
+  handleValidationErrors
+];
+
+const requestPasswordResetValidation = [
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Please provide a valid email')
+    .normalizeEmail(),
+
+  handleValidationErrors
+];
 
 const refreshTokenValidation = [
   body('refreshToken')
@@ -231,33 +226,15 @@ router.post('/login', loginPasswordValidation, login);
  * @route   POST /api/v1/auth/forgot-password
  * @desc    Request password reset email
  * @access  Public
- * @note    Feature not yet implemented - placeholder for future
  */
-// router.post('/forgot-password', requestPasswordResetValidation, requestPasswordReset);
+router.post('/forgot-password', requestPasswordResetValidation, requestPasswordReset);
 
 /**
  * @route   POST /api/v1/auth/reset-password
  * @desc    Reset password using token
  * @access  Public
- * @note    Feature not yet implemented - placeholder for future
  */
-// router.post('/reset-password', resetPasswordValidation, resetPassword);
-
-/**
- * @route   GET /api/v1/auth/verify-email
- * @desc    Verify email address
- * @access  Public
- * @note    Feature not yet implemented - placeholder for future
- */
-// router.get('/verify-email', verifyEmailValidation, verifyEmail);
-
-/**
- * @route   POST /api/v1/auth/resend-verification
- * @desc    Resend email verification
- * @access  Public
- * @note    Feature not yet implemented - placeholder for future
- */
-// router.post('/resend-verification', requestPasswordResetValidation, resendVerification);
+router.post('/reset-password', resetPasswordValidation, resetPassword);
 
 /**
  * @route   POST /api/v1/auth/refresh
@@ -287,9 +264,8 @@ router.get('/me', protect, getMe);
  * @route   PUT /api/v1/auth/change-password
  * @desc    Change password for authenticated user
  * @access  Private
- * @note    Feature not yet implemented - placeholder for future
  */
-// router.put('/change-password', protect, changePasswordValidation, changePassword);
+router.put('/change-password', protect, changePasswordValidation, changePassword);
 
 /**
  * @route   POST /api/v1/auth/logout

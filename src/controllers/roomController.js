@@ -9,6 +9,7 @@ const Booking = require('../models/Booking');
 const { validationResult } = require('express-validator');
 const logger = require('../config/logger');
 const mongoose = require('mongoose');
+const { escapeRegex, sanitizeSortField, toSafeString } = require('../utils/sanitize');
 
 /**
  * @desc    Get all rooms with filters and pagination
@@ -32,13 +33,14 @@ const getRooms = async (req, res) => {
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     // Build query
-    let query = { isActive: true };
+    const query = { isActive: true };
 
     // Search by room number
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { number: { $regex: search, $options: 'i' } },
-        { type: { $regex: search, $options: 'i' } }
+        { number: { $regex: safeSearch, $options: 'i' } },
+        { type: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
@@ -64,7 +66,8 @@ const getRooms = async (req, res) => {
 
     // Build sort object
     const sort = {};
-    sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    const safeSortBy = sanitizeSortField(sortBy, 'rooms', 'number');
+    sort[safeSortBy] = sortOrder === 'asc' ? 1 : -1;
 
     const rooms = await Room.find(query)
       .sort(sort)
@@ -206,9 +209,10 @@ const createRoom = async (req, res) => {
 
   try {
     const { number } = req.body;
+    const safeNumber = toSafeString(number);
 
     // Check for duplicate room number
-    const existingRoom = await Room.findOne({ number });
+    const existingRoom = await Room.findOne({ number: safeNumber });
     if (existingRoom) {
       return res.status(400).json({
         success: false,
@@ -421,9 +425,9 @@ const checkAvailability = async (req, res) => {
     }
 
     // Build room query
-    let roomQuery = { isActive: true, status: { $in: ['available', 'dirty'] } };
+    const roomQuery = { isActive: true, status: { $in: ['available', 'dirty'] } };
     if (roomType && roomType !== 'all') {
-      roomQuery.type = roomType;
+      roomQuery.type = toSafeString(roomType);
     }
 
     // Get all potentially available rooms
@@ -495,7 +499,7 @@ const updateRoomStatus = async (req, res) => {
       });
     }
 
-    const { status, notes } = req.body;
+    const { status, notes: _notes } = req.body;
 
     const room = await Room.findByIdAndUpdate(
       req.params.id,
