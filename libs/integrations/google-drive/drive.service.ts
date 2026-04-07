@@ -26,12 +26,10 @@ export class DriveService {
     const { google } = await import('googleapis');
     const { createReadStream } = await import('fs');
 
-    // Validate filePath to prevent path traversal
-    const resolvedPath = path.resolve(filePath);
+    // Validate filePath to prevent path traversal: must be a direct child of /tmp
     const allowedDir = path.resolve('/tmp');
-    if (!resolvedPath.startsWith(allowedDir + path.sep) && resolvedPath !== allowedDir) {
-      throw new Error('Invalid file path: path traversal detected');
-    }
+    const fileName_ = path.basename(filePath); // extract only the filename, dropping any directory component
+    const safePath = path.join(allowedDir, fileName_); // reconstruct safe path
 
     const auth = new google.auth.GoogleAuth({
       keyFile: process.env.GOOGLE_SA_KEY_PATH,
@@ -44,7 +42,7 @@ export class DriveService {
 
     const res = await drive.files.create({
       requestBody: { name: fileName, parents: [folderId] },
-      media: { mimeType, body: createReadStream(resolvedPath) },
+      media: { mimeType, body: createReadStream(safePath) },
       fields: 'id, webViewLink',
     });
 

@@ -10,6 +10,7 @@ const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const logger = require('../config/logger');
 const { sendOtpEmail, sendPasswordResetEmail } = require('../services/emailService');
+const { toSafeString } = require('../utils/sanitize');
 
 /**
  * Generate JWT access and refresh tokens
@@ -685,7 +686,10 @@ const requestPasswordReset = async (req, res) => {
     return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
   }
 
-  const { email } = req.body;
+  const email = toSafeString(req.body.email);
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Valid email is required' });
+  }
 
   try {
     const user = await User.findOne({ email });
