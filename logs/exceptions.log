@@ -110,3 +110,24 @@ Require stack:
     at require (node:internal/modules/helpers:147:16)
     at Object.<anonymous> (D:\Hotel_Mangement\Backend\src\app.js:25:20)
     at Module._compile (node:internal/modules/cjs/loader:1706:14)
+2026-04-12 09:46:19 [error]: node:internal/modules/cjs/loader:1459
+  throw err;
+  ^
+
+Error: Cannot find module 'nodemailer'
+Require stack:
+- /home/runner/work/Backend/Backend/src/services/emailService.js
+- /home/runner/work/Backend/Backend/src/controllers/authController.js
+- /home/runner/work/Backend/Backend/src/routes/authRoutes.js
+- /home/runner/work/Backend/Backend/src/app.js
+- /home/runner/work/Backend/Backend/[eval]
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1456:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1066:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1071:22)
+    at Module._load (node:internal/modules/cjs/loader:1242:25)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.require (node:internal/modules/cjs/loader:1556:12)
+    at require (node:internal/modules/helpers:152:16)
+    at Object.<anonymous> (/home/runner/work/Backend/Backend/src/services/emailService.js:1:20)
+    at Module._compile (node:internal/modules/cjs/loader:1812:14)
+    at Object..js (node:internal/modules/cjs/loader:1943:10)

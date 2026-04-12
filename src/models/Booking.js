@@ -366,4 +366,54 @@ bookingSchema.statics.getUpcomingBookings = async function(days = 7) {
     .sort({ checkInDate: 1 });
 };
 
-module.exports = mongoose.model('Booking', bookingSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('Booking', bookingSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+  const db = require('../config/jsonDb');
+
+  const instanceMethods = {
+    addPayment(amount, method, reference) {
+      const payments = this.payments || [];
+      payments.push({ amount, method, reference: reference || null, date: new Date().toISOString() });
+      this.payments = payments;
+      this.paidAmount = (this.paidAmount || 0) + amount;
+      return this.save();
+    },
+    calculateCancellationFee() {
+      const daysUntilCheckIn = Math.ceil((new Date(this.checkInDate) - new Date()) / (1000 * 60 * 60 * 24));
+      if (daysUntilCheckIn > 7) return 0;
+      if (daysUntilCheckIn > 3) return this.totalAmount * 0.25;
+      if (daysUntilCheckIn > 1) return this.totalAmount * 0.50;
+      return this.totalAmount * 0.75;
+    },
+  };
+
+  const statics = {
+    async checkAvailability(roomId, checkIn, checkOut, excludeBookingId = null) {
+      const query = {
+        room:   String(roomId),
+        status: { $in: ['confirmed', 'checked-in'] },
+        checkInDate:  { $lt: (checkOut instanceof Date ? checkOut : new Date(checkOut)).toISOString() },
+        checkOutDate: { $gt: (checkIn  instanceof Date ? checkIn  : new Date(checkIn)).toISOString() },
+      };
+      if (excludeBookingId) query._id = { $ne: String(excludeBookingId) };
+      return db.count('bookings', query) === 0;
+    },
+
+    async getUpcomingBookings(days = 7) {
+      const today  = new Date(); today.setHours(0, 0, 0, 0);
+      const future = new Date(today); future.setDate(future.getDate() + days);
+      return this.find({
+        checkInDate: { $gte: today.toISOString(), $lte: future.toISOString() },
+        status:      { $in: ['confirmed', 'pending'] },
+      }).populate('guest').populate('room').sort({ checkInDate: 1 });
+    },
+  };
+
+  module.exports = createJsonModel('bookings', 'Booking', {
+    instanceMethods,
+    statics,
+    populateRefs: { guest: 'guests', room: 'rooms', invoice: 'invoices' },
+  });
+}

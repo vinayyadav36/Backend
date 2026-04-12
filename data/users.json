@@ -1,0 +1,37 @@
+[
+  {
+    "_id": "fb7eb5488272d1515ad515f2",
+    "name": "Admin User",
+    "email": "admin@hotel.com",
+    "password": "$2a$10$1x.yZom9NuSswimgO7GW1e.SQA.82XiX4HSCVn.pWyivAwKY74jQS",
+    "role": "admin",
+    "permissions": [
+      "all"
+    ],
+    "phone": "+91-9000000001",
+    "hotelId": "hotel_001",
+    "isActive": true,
+    "isEmailVerified": true,
+    "loginAttempts": 0,
+    "lockUntil": null,
+    "refreshToken": null,
+    "passwordResetToken": null,
+    "passwordResetExpires": null,
+    "otpCode": null,
+    "otpExpires": null,
+    "otpAttempts": 0,
+    "lastLogin": "2026-04-12T10:00:24.590Z",
+    "avatar": null,
+    "preferences": {
+      "language": "en",
+      "theme": "light",
+      "notifications": {
+        "email": true,
+        "sms": false,
+        "push": true
+      }
+    },
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2026-04-12T10:05:58.678Z"
+  }
+]

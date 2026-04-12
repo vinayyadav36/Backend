@@ -6,9 +6,10 @@
 
 const Booking = require('../models/Booking');
 const Room = require('../models/Room');
-const _Guest = require('../models/Guest');
+const Guest = require('../models/Guest');
 const Invoice = require('../models/Invoice');
 const logger = require('../config/logger');
+const aiService = require('../services/aiService');
 
 /**
  * Get dashboard analytics with KPIs
@@ -558,8 +559,358 @@ function getTimeAgo(date) {
   return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
 }
 
+// ─── Additional analytics functions ──────────────────────────────────────────
+
+/**
+ * Get guest demographics and analytics
+ * @route GET /api/v1/analytics/guests
+ * @access Private (Admin, Manager)
+ */
+const getGuestAnalytics = async (req, res) => {
+  try {
+    const { period = '30d' } = req.query;
+
+    const periodMap = { '7d': 7, '30d': 30, '90d': 90, '1y': 365 };
+    const days = periodMap[period] || 30;
+    const startDate = new Date(Date.now() - days * 86400000);
+
+    let nationalityBreakdown = [];
+    let vipBreakdown         = [];
+    let repeatGuestRate      = 0;
+    let totalGuests          = 0;
+    let newGuestsInPeriod    = 0;
+
+    if (process.env.USE_JSON_DB === 'true') {
+      const allGuests = await Guest.find({});
+      totalGuests = allGuests.length;
+      newGuestsInPeriod = allGuests.filter(g => new Date(g.createdAt) >= startDate).length;
+
+      // Nationality breakdown
+      const natMap = {};
+      allGuests.forEach(g => {
+        const nat = g.nationality || 'Unknown';
+        natMap[nat] = (natMap[nat] || 0) + 1;
+      });
+      nationalityBreakdown = Object.entries(natMap)
+        .map(([nationality, count]) => ({ nationality, count, percentage: totalGuests > 0 ? Math.round(count / totalGuests * 100) : 0 }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
+
+      // VIP breakdown
+      const vipMap = {};
+      allGuests.forEach(g => { const v = g.vipStatus || 'regular'; vipMap[v] = (vipMap[v] || 0) + 1; });
+      vipBreakdown = Object.entries(vipMap).map(([status, count]) => ({ status, count }));
+
+      // Repeat guest rate
+      const repeatGuests = allGuests.filter(g => (g.totalBookings || 0) > 1).length;
+      repeatGuestRate = totalGuests > 0 ? Math.round(repeatGuests / totalGuests * 100 * 10) / 10 : 0;
+    } else {
+      const [natAgg, vipAgg, total, newGuests, repeatAgg] = await Promise.all([
+        Guest.aggregate([
+          { $group: { _id: '$nationality', count: { $sum: 1 } } },
+          { $sort: { count: -1 } },
+          { $limit: 10 },
+        ]),
+        Guest.aggregate([
+          { $group: { _id: '$vipStatus', count: { $sum: 1 } } },
+        ]),
+        Guest.countDocuments({}),
+        Guest.countDocuments({ createdAt: { $gte: startDate } }),
+        Guest.countDocuments({ totalBookings: { $gt: 1 } }),
+      ]);
+      totalGuests = total;
+      newGuestsInPeriod = newGuests;
+      nationalityBreakdown = natAgg.map(n => ({
+        nationality: n._id || 'Unknown',
+        count: n.count,
+        percentage: total > 0 ? Math.round(n.count / total * 100) : 0,
+      }));
+      vipBreakdown = vipAgg.map(v => ({ status: v._id || 'regular', count: v.count }));
+      repeatGuestRate = total > 0 ? Math.round(repeatAgg / total * 100 * 10) / 10 : 0;
+    }
+
+    logger.info(`Guest analytics fetched: ${totalGuests} total guests`);
+
+    res.json({
+      success: true,
+      data: {
+        totalGuests,
+        newGuestsInPeriod,
+        repeatGuestRate,
+        nationalityBreakdown,
+        vipBreakdown,
+        period,
+      },
+    });
+  } catch (error) {
+    logger.error('Guest analytics error:', { error: error.message, query: req.query });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch guest analytics',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
+/**
+ * Get booking source analytics (OTA vs direct vs walk-in)
+ * @route GET /api/v1/analytics/booking-sources
+ * @access Private (Admin, Manager)
+ */
+const getBookingSourceAnalytics = async (req, res) => {
+  try {
+    const { period = '30d' } = req.query;
+    const periodMap = { '7d': 7, '30d': 30, '90d': 90, '1y': 365 };
+    const days = periodMap[period] || 30;
+    const startDate = new Date(Date.now() - days * 86400000);
+
+    let sourceData = [];
+    let totalBookings = 0;
+
+    if (process.env.USE_JSON_DB === 'true') {
+      const allBookings = await Booking.find({});
+      const filtered = allBookings.filter(b => new Date(b.createdAt) >= startDate);
+      totalBookings = filtered.length;
+      const srcMap = {};
+      filtered.forEach(b => { const s = b.source || 'direct'; srcMap[s] = (srcMap[s] || 0) + 1; });
+      sourceData = Object.entries(srcMap).map(([source, count]) => ({
+        source, count,
+        percentage: totalBookings > 0 ? Math.round(count / totalBookings * 100 * 10) / 10 : 0,
+        revenue: filtered.filter(b => (b.source || 'direct') === source)
+          .reduce((s, b) => s + Number(b.totalAmount || 0), 0),
+      })).sort((a, b) => b.count - a.count);
+    } else {
+      const [srcAgg, total] = await Promise.all([
+        Booking.aggregate([
+          { $match: { createdAt: { $gte: startDate } } },
+          { $group: {
+            _id: '$source',
+            count: { $sum: 1 },
+            revenue: { $sum: '$totalAmount' },
+          }},
+          { $sort: { count: -1 } },
+        ]),
+        Booking.countDocuments({ createdAt: { $gte: startDate } }),
+      ]);
+      totalBookings = total;
+      sourceData = srcAgg.map(s => ({
+        source: s._id || 'direct',
+        count: s.count,
+        revenue: Math.round(s.revenue),
+        percentage: total > 0 ? Math.round(s.count / total * 100 * 10) / 10 : 0,
+      }));
+    }
+
+    // Group into categories
+    const otaSources    = ['online', 'travel_agency'];
+    const directSources = ['direct', 'phone', 'corporate'];
+    const walkInSources = ['walk-in'];
+
+    const groupRevenue = (sources) => sourceData
+      .filter(s => sources.includes(s.source))
+      .reduce((t, s) => ({ count: t.count + s.count, revenue: t.revenue + (s.revenue || 0) }), { count: 0, revenue: 0 });
+
+    logger.info(`Booking source analytics fetched: ${totalBookings} bookings in ${period}`);
+
+    res.json({
+      success: true,
+      data: {
+        sources:      sourceData,
+        totalBookings,
+        grouped: {
+          ota:    groupRevenue(otaSources),
+          direct: groupRevenue(directSources),
+          walkIn: groupRevenue(walkInSources),
+        },
+        period,
+      },
+    });
+  } catch (error) {
+    logger.error('Booking source analytics error:', { error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch booking source analytics',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
+/**
+ * Get room performance analytics
+ * @route GET /api/v1/analytics/room-performance
+ * @access Private (Admin, Manager)
+ */
+const getRoomPerformance = async (req, res) => {
+  try {
+    const { period = '30d' } = req.query;
+    const periodMap = { '7d': 7, '30d': 30, '90d': 90, '1y': 365 };
+    const days = periodMap[period] || 30;
+    const startDate = new Date(Date.now() - days * 86400000);
+
+    let byType    = [];
+    let topRooms  = [];
+
+    if (process.env.USE_JSON_DB === 'true') {
+      const allBookings = await Booking.find({});
+      const allRooms    = await Room.find({ isActive: true });
+      const filtered = allBookings.filter(b =>
+        new Date(b.createdAt) >= startDate &&
+        ['confirmed','checked-in','checked-out'].includes(b.status)
+      );
+
+      // By room type
+      const typeMap = {};
+      filtered.forEach(b => {
+        const rtype = b.room?.type || 'unknown';
+        if (!typeMap[rtype]) typeMap[rtype] = { bookings: 0, revenue: 0 };
+        typeMap[rtype].bookings++;
+        typeMap[rtype].revenue += Number(b.totalAmount || 0);
+      });
+      byType = Object.entries(typeMap).map(([type, d]) => ({
+        type, bookings: d.bookings, revenue: Math.round(d.revenue),
+        avgRevenue: d.bookings > 0 ? Math.round(d.revenue / d.bookings) : 0,
+      })).sort((a, b) => b.revenue - a.revenue);
+
+      // Top rooms
+      const roomMap = {};
+      filtered.forEach(b => {
+        const rnum = b.room?.number || String(b.room || 'N/A');
+        if (!roomMap[rnum]) roomMap[rnum] = { bookings: 0, revenue: 0 };
+        roomMap[rnum].bookings++;
+        roomMap[rnum].revenue += Number(b.totalAmount || 0);
+      });
+      topRooms = Object.entries(roomMap).map(([number, d]) => ({
+        number, bookings: d.bookings, revenue: Math.round(d.revenue),
+      })).sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+    } else {
+      const [typeAgg, roomAgg] = await Promise.all([
+        Booking.aggregate([
+          { $match: { createdAt: { $gte: startDate }, status: { $in: ['confirmed','checked-in','checked-out'] } } },
+          { $lookup: { from: 'rooms', localField: 'room', foreignField: '_id', as: 'roomData' } },
+          { $unwind: { path: '$roomData', preserveNullAndEmptyArrays: true } },
+          { $group: {
+            _id: '$roomData.type',
+            bookings: { $sum: 1 },
+            revenue:  { $sum: '$totalAmount' },
+          }},
+          { $sort: { revenue: -1 } },
+        ]),
+        Booking.aggregate([
+          { $match: { createdAt: { $gte: startDate }, status: { $in: ['confirmed','checked-in','checked-out'] } } },
+          { $lookup: { from: 'rooms', localField: 'room', foreignField: '_id', as: 'roomData' } },
+          { $unwind: { path: '$roomData', preserveNullAndEmptyArrays: true } },
+          { $group: {
+            _id: '$roomData.number',
+            bookings: { $sum: 1 },
+            revenue:  { $sum: '$totalAmount' },
+          }},
+          { $sort: { revenue: -1 } },
+          { $limit: 10 },
+        ]),
+      ]);
+
+      byType   = typeAgg.map(t => ({
+        type: t._id || 'unknown',
+        bookings: t.bookings,
+        revenue: Math.round(t.revenue),
+        avgRevenue: t.bookings > 0 ? Math.round(t.revenue / t.bookings) : 0,
+      }));
+      topRooms = roomAgg.map(r => ({
+        number: r._id || 'N/A',
+        bookings: r.bookings,
+        revenue: Math.round(r.revenue),
+      }));
+    }
+
+    logger.info(`Room performance analytics fetched for period: ${period}`);
+
+    res.json({
+      success: true,
+      data: { byType, topRooms, period },
+    });
+  } catch (error) {
+    logger.error('Room performance analytics error:', { error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch room performance analytics',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
+/**
+ * Get 30-day revenue forecast using aiService
+ * @route GET /api/v1/analytics/forecast
+ * @access Private (Admin, Manager)
+ */
+const getForecast = async (req, res) => {
+  try {
+    const { horizon = 30 } = req.query;
+    const lookback = 90;
+    const startDate = new Date(Date.now() - lookback * 86400000);
+
+    let historicalData = [];
+
+    if (process.env.USE_JSON_DB === 'true') {
+      const invoices = await Invoice.find({});
+      const revMap = {};
+      invoices
+        .filter(i => i.status === 'paid' && new Date(i.createdAt) >= startDate)
+        .forEach(i => {
+          const d = new Date(i.createdAt).toISOString().split('T')[0];
+          revMap[d] = (revMap[d] || 0) + Number(i.totalAmount || 0);
+        });
+      historicalData = Object.entries(revMap)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, revenue]) => ({ date, revenue }));
+    } else {
+      const revAgg = await Invoice.aggregate([
+        { $match: { status: 'paid', createdAt: { $gte: startDate } } },
+        { $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          revenue: { $sum: '$totalAmount' },
+        }},
+        { $sort: { _id: 1 } },
+      ]);
+      historicalData = revAgg.map(r => ({ date: r._id, revenue: r.revenue }));
+    }
+
+    if (historicalData.length < 2) {
+      return res.json({
+        success: true,
+        data: { forecast: [], message: 'Insufficient historical data for forecasting', historicalPoints: historicalData.length },
+      });
+    }
+
+    const forecast = aiService.predictRevenue(historicalData, parseInt(horizon, 10) || 30);
+
+    logger.info(`Revenue forecast: ${historicalData.length} historical points → ${forecast.length} forecast days`);
+
+    res.json({
+      success: true,
+      data: {
+        forecast,
+        historical: historicalData.slice(-30),
+        historicalPoints: historicalData.length,
+        horizon: parseInt(horizon, 10) || 30,
+      },
+    });
+  } catch (error) {
+    logger.error('Forecast analytics error:', { error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate forecast',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
 module.exports = {
   getDashboardAnalytics,
   getRevenueAnalytics,
-  getOccupancyAnalytics
+  getOccupancyAnalytics,
+  getGuestAnalytics,
+  getBookingSourceAnalytics,
+  getRoomPerformance,
+  getForecast,
 };

@@ -1,0 +1,10 @@
+const { createJsonModel } = require('../../models/JsonModel');
+const Employee = createJsonModel('hr_employees', 'Employee', { name: '', email: '', phone: '', departmentId: '', designation: '', salary: 0, status: 'active', joinDate: null, createdAt: null, updatedAt: null });
+const HRDepartment = createJsonModel('hr_departments', 'HRDepartment', { name: '', code: '', managerId: '', budget: 0, createdAt: null, updatedAt: null });
+const HRAttendance = createJsonModel('hr_attendance', 'HRAttendance', { employeeId: '', date: null, checkIn: null, checkOut: null, hoursWorked: 0, status: 'present', createdAt: null, updatedAt: null });
+const Leave = createJsonModel('hr_leaves', 'Leave', { employeeId: '', type: 'annual', startDate: null, endDate: null, days: 0, status: 'pending', reason: '', createdAt: null, updatedAt: null });
+const Payroll = createJsonModel('hr_payrolls', 'Payroll', { employeeId: '', month: 0, year: 0, basicSalary: 0, allowances: 0, deductions: 0, netPay: 0, status: 'pending', createdAt: null, updatedAt: null });
+const Performance = createJsonModel('hr_performance', 'Performance', { employeeId: '', period: '', rating: 0, goals: [], feedback: '', reviewerId: '', createdAt: null, updatedAt: null });
+const JobPosting = createJsonModel('hr_job_postings', 'JobPosting', { title: '', departmentId: '', description: '', requirements: '', status: 'open', applications: 0, createdAt: null, updatedAt: null });
+const Training = createJsonModel('hr_trainings', 'Training', { title: '', description: '', trainer: '', startDate: null, endDate: null, enrollees: [], status: 'scheduled', createdAt: null, updatedAt: null });
+module.exports = { Employee, HRDepartment, HRAttendance, Leave, Payroll, Performance, JobPosting, Training };

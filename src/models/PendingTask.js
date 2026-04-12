@@ -35,4 +35,11 @@ const pendingTaskSchema = new mongoose.Schema(
 
 pendingTaskSchema.index({ tenantId: 1, status: 1 });
 
-module.exports = mongoose.model('PendingTask', pendingTaskSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('PendingTask', pendingTaskSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+  module.exports = createJsonModel('pending_tasks', 'PendingTask', {
+    populateRefs: { reviewedBy: 'users', createdBy: 'users' },
+  });
+}

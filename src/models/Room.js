@@ -543,4 +543,57 @@ roomSchema.statics.getOccupancyStats = async function(startDate, endDate) {
   };
 };
 
-module.exports = mongoose.model('Room', roomSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('Room', roomSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+  const db = require('../config/jsonDb');
+
+  const statics = {
+    async findAvailableRooms(checkIn, checkOut, filters = {}) {
+      const Booking = require('./Booking');
+      const bookings = await Booking.find({
+        status: { $in: ['confirmed', 'checked-in'] },
+        checkInDate:  { $lt: checkOut },
+        checkOutDate: { $gt: checkIn },
+      }).lean();
+      const bookedRooms = bookings.map(b => String(b.room));
+      const query = {
+        _id: { $nin: bookedRooms },
+        isActive: true,
+        status: { $in: ['available', 'dirty'] },
+      };
+      if (filters.type)     query.type  = filters.type;
+      if (filters.floor)    query.floor = filters.floor;
+      if (filters.minRate)  query['rate.baseRate'] = { $gte: filters.minRate };
+      if (filters.maxRate)  query['rate.baseRate'] = { ...(query['rate.baseRate'] || {}), $lte: filters.maxRate };
+      if (filters.amenities) query.amenities = { $all: filters.amenities };
+      return this.find(query).sort({ 'rate.baseRate': 1 });
+    },
+
+    async getOccupancyStats(startDate, endDate) {
+      const totalRooms = db.count('rooms', { isActive: true });
+      const totalDays  = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+      const Booking    = require('./Booking');
+      const bookings   = db.find('bookings', {
+        status: { $in: ['confirmed', 'checked-in', 'checked-out'] },
+        $or: [
+          { checkInDate:  { $gte: startDate.toISOString(), $lte: endDate.toISOString() } },
+          { checkOutDate: { $gte: startDate.toISOString(), $lte: endDate.toISOString() } },
+          { checkInDate: { $lte: startDate.toISOString() }, checkOutDate: { $gte: endDate.toISOString() } },
+        ],
+      });
+      let totalRoomNights = 0;
+      for (const booking of bookings) {
+        const bs = new Date(booking.checkInDate)  > startDate ? new Date(booking.checkInDate)  : startDate;
+        const be = new Date(booking.checkOutDate) < endDate   ? new Date(booking.checkOutDate) : endDate;
+        const nights = Math.ceil((be - bs) / (1000 * 60 * 60 * 24));
+        totalRoomNights += Math.max(0, nights);
+      }
+      const occupancyRate = totalRooms > 0 ? (totalRoomNights / (totalRooms * totalDays)) * 100 : 0;
+      return { totalRooms, totalDays, totalRoomNights, occupancyRate: Math.round(occupancyRate * 10) / 10, availableRoomNights: (totalRooms * totalDays) - totalRoomNights };
+    },
+  };
+
+  module.exports = createJsonModel('rooms', 'Room', { statics });
+}

@@ -629,11 +629,151 @@ const generateInvoicePDF = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Mark invoice as fully paid
+ * @route   PUT /api/v1/invoices/:id/mark-paid
+ * @access  Private (manage_invoices)
+ */
+const markAsPaid = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid invoice ID' });
+    }
+
+    const invoice = await Invoice.findById(req.params.id);
+    if (!invoice) {
+      return res.status(404).json({ success: false, message: 'Invoice not found' });
+    }
+
+    if (invoice.status === 'paid') {
+      return res.status(400).json({ success: false, message: 'Invoice is already marked as paid' });
+    }
+
+    if (invoice.status === 'cancelled') {
+      return res.status(400).json({ success: false, message: 'Cannot mark a cancelled invoice as paid' });
+    }
+
+    const { paymentMethod, paymentReference } = req.body;
+
+    const updated = await Invoice.findByIdAndUpdate(
+      req.params.id,
+      {
+        status:    'paid',
+        paidAmount: invoice.totalAmount,
+        paidAt:    new Date(),
+        ...(paymentMethod    ? { paymentMethod }    : {}),
+        ...(paymentReference ? { paymentReference } : {}),
+        updatedAt: new Date(),
+      },
+      { new: true, runValidators: true }
+    )
+      .populate('guest', 'name email phone')
+      .populate('booking', 'bookingNumber');
+
+    // Sync booking payment status
+    if (updated.booking) {
+      await Booking.findByIdAndUpdate(
+        typeof updated.booking === 'object' ? updated.booking._id : updated.booking,
+        { paidAmount: updated.totalAmount, paymentStatus: 'paid' }
+      );
+    }
+
+    // Emit real-time update
+    const io = req.app?.get('io');
+    if (io) {
+      io.to(`hotel_${req.user?.hotelId || 'hotel_001'}`).emit('invoice_updated', { invoice: updated });
+    }
+
+    logger.info(`Invoice marked as paid: ${req.params.id} by user: ${req.user?.id}`);
+
+    res.json({
+      success: true,
+      message: 'Invoice marked as paid',
+      data: { invoice: updated },
+    });
+  } catch (error) {
+    logger.error('Mark as paid error:', { error: error.message, invoiceId: req.params.id });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to mark invoice as paid',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
+/**
+ * @desc    Mark invoice as cancelled
+ * @route   PUT /api/v1/invoices/:id/cancel
+ * @access  Private (manage_invoices)
+ */
+const markAsCancelled = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ success: false, message: 'Invalid invoice ID' });
+    }
+
+    const invoice = await Invoice.findById(req.params.id);
+    if (!invoice) {
+      return res.status(404).json({ success: false, message: 'Invoice not found' });
+    }
+
+    if (invoice.status === 'cancelled') {
+      return res.status(400).json({ success: false, message: 'Invoice is already cancelled' });
+    }
+
+    if (invoice.status === 'paid') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot cancel a paid invoice. Please process a refund instead.',
+      });
+    }
+
+    const { reason } = req.body;
+
+    const updated = await Invoice.findByIdAndUpdate(
+      req.params.id,
+      {
+        status:       'cancelled',
+        cancelledAt:  new Date(),
+        cancelReason: reason || 'Cancelled by staff',
+        updatedAt:    new Date(),
+      },
+      { new: true, runValidators: true }
+    )
+      .populate('guest', 'name email phone')
+      .populate('booking', 'bookingNumber');
+
+    // Emit real-time update
+    const io = req.app?.get('io');
+    if (io) {
+      io.to(`hotel_${req.user?.hotelId || 'hotel_001'}`).emit('invoice_updated', { invoice: updated });
+    }
+
+    logger.info(`Invoice cancelled: ${req.params.id} by user: ${req.user?.id}`);
+
+    res.json({
+      success: true,
+      message: 'Invoice cancelled successfully',
+      data: { invoice: updated },
+    });
+  } catch (error) {
+    logger.error('Mark as cancelled error:', { error: error.message, invoiceId: req.params.id });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to cancel invoice',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
+  }
+};
+
+// Update module.exports to include all exported functions
 module.exports = {
   getInvoices,
   getInvoice,
   createInvoice,
   updateInvoice,
   deleteInvoice,
-  generateInvoicePDF
+  generateInvoicePDF,
+  markAsPaid,
+  markAsCancelled,
 };
