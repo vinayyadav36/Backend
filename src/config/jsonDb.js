@@ -101,18 +101,23 @@ function getPath(obj, dotPath) {
   return cur;
 }
 
+/** Prototype-pollution guard for path segments. */
+const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
 /** Write a value via dot-notation path, creating intermediate objects. */
 function setPath(obj, dotPath, value) {
-  if (!dotPath.includes('.')) { obj[dotPath] = value; return; }
-  const parts = dotPath.split('.');
+  const parts = dotPath.includes('.') ? dotPath.split('.') : [dotPath];
   let cur = obj;
   for (let i = 0; i < parts.length - 1; i++) {
-    if (cur[parts[i]] == null || typeof cur[parts[i]] !== 'object') {
-      cur[parts[i]] = {};
+    const part = parts[i];
+    if (DANGEROUS_KEYS.has(part)) return; // refuse to write into prototype chain
+    if (cur[part] == null || typeof cur[part] !== 'object') {
+      cur[part] = {};
     }
-    cur = cur[parts[i]];
+    cur = cur[part];
   }
-  cur[parts[parts.length - 1]] = value;
+  const last = parts[parts.length - 1];
+  if (!DANGEROUS_KEYS.has(last)) cur[last] = value;
 }
 
 /** Loose equality that handles ObjectId ↔ string comparisons. */
@@ -243,7 +248,9 @@ function applyUpdate(doc, update) {
           if (v && typeof v === 'object' && v.$each) {
             const slice = v.$slice;
             arr.push(...(v.$each || []));
-            if (typeof slice === 'number') arr = arr.slice(slice < 0 ? slice : 0, slice >= 0 ? slice : undefined);
+            if (typeof slice === 'number') {
+              arr = slice >= 0 ? arr.slice(0, slice) : arr.slice(slice);
+            }
           } else {
             arr.push(v);
           }
@@ -281,11 +288,15 @@ function applyUpdate(doc, update) {
         break;
       case '$rename':
         for (const [oldP, newP] of Object.entries(fields)) {
-          const val = getPath(out, oldP);
+          const val  = getPath(out, oldP);
           const parts = oldP.split('.');
           let cur = out;
-          for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
-          delete cur[parts[parts.length - 1]];
+          let valid = true;
+          for (let i = 0; i < parts.length - 1; i++) {
+            if (cur[parts[i]] == null) { valid = false; break; }
+            cur = cur[parts[i]];
+          }
+          if (valid) delete cur[parts[parts.length - 1]];
           setPath(out, newP, val);
         }
         break;

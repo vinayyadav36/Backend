@@ -557,7 +557,7 @@ if (process.env.USE_JSON_DB !== 'true') {
         checkInDate:  { $lt: checkOut },
         checkOutDate: { $gt: checkIn },
       }).lean();
-      const bookedRooms = (await bookings).map(b => String(b.room));
+      const bookedRooms = bookings.map(b => String(b.room));
       const query = {
         _id: { $nin: bookedRooms },
         isActive: true,

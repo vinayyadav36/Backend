@@ -381,7 +381,7 @@ function createJsonModel(collectionName, modelName, opts = {}) {
   ModelConstructor.findByIdAndUpdate = function(id, update, options = {}) {
     const execFn = async (_opts) => {
       if (!id) return null;
-      const result = await db.update(col, { _id: id }, update, { new: !!options.new || !!options.returnDocument });
+      await db.update(col, { _id: id }, update, { new: !!options.new || !!options.returnDocument });
       if (options.new || options.returnDocument === 'after') {
         const fresh = db.findById(col, id);
         return fresh ? _wrap(fresh) : null;

@@ -336,8 +336,8 @@ if (process.env.USE_JSON_DB !== 'true') {
   };
 
   const preSave = async function() {
-    // Hash password if it is new or modified (simple check: doesn't look like a bcrypt hash)
-    if (this.password && !this.password.startsWith('$2')) {
+    // Only hash if value doesn't already match a bcrypt hash format ($2a$, $2b$, $2y$)
+    if (this.password && !/^\$2[aby]\$\d{2}\$/.test(this.password)) {
       this.password = await bcrypt.hash(this.password, 10);
     }
   };
