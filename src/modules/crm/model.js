@@ -1,0 +1,9 @@
+const { createJsonModel } = require('../../models/JsonModel');
+const Contact = createJsonModel('crm_contacts', 'Contact', { name: '', email: '', phone: '', company: '', source: '', status: 'active', createdAt: null, updatedAt: null });
+const Lead = createJsonModel('crm_leads', 'Lead', { name: '', email: '', phone: '', source: '', score: 0, status: 'new', assignedTo: '', notes: '', createdAt: null, updatedAt: null });
+const Deal = createJsonModel('crm_deals', 'Deal', { title: '', contactId: '', value: 0, stage: 'prospecting', probability: 0, closeDate: null, assignedTo: '', createdAt: null, updatedAt: null });
+const Activity = createJsonModel('crm_activities', 'Activity', { type: '', contactId: '', dealId: '', subject: '', notes: '', dueDate: null, completed: false, createdAt: null, updatedAt: null });
+const Pipeline = createJsonModel('crm_pipelines', 'Pipeline', { name: '', stages: [], createdAt: null, updatedAt: null });
+const Campaign = createJsonModel('crm_campaigns', 'Campaign', { name: '', type: '', budget: 0, spent: 0, leads: 0, conversions: 0, status: 'draft', startDate: null, endDate: null, createdAt: null, updatedAt: null });
+const SupportTicket = createJsonModel('crm_tickets', 'SupportTicket', { subject: '', contactId: '', priority: 'medium', status: 'open', assignedTo: '', slaDeadline: null, resolvedAt: null, createdAt: null, updatedAt: null });
+module.exports = { Contact, Lead, Deal, Activity, Pipeline, Campaign, SupportTicket };

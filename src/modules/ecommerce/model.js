@@ -1,0 +1,10 @@
+const { createJsonModel } = require('../../models/JsonModel');
+const Product = createJsonModel('ec_products', 'Product', { name: '', code: '', price: 0, category: '', vendor: '', stock: 0, images: [], description: '', status: 'active', createdAt: null, updatedAt: null });
+const Order = createJsonModel('ec_orders', 'Order', { customerId: '', items: [], subtotal: 0, tax: 0, shipping: 0, total: 0, status: 'pending', couponCode: '', paymentInfo: {}, createdAt: null, updatedAt: null });
+const Cart = createJsonModel('ec_carts', 'Cart', { customerId: '', items: [], total: 0, createdAt: null, updatedAt: null });
+const Category = createJsonModel('ec_categories', 'Category', { name: '', slug: '', parent: '', createdAt: null, updatedAt: null });
+const Vendor = createJsonModel('ec_vendors', 'Vendor', { name: '', email: '', phone: '', address: '', status: 'active', createdAt: null, updatedAt: null });
+const Review = createJsonModel('ec_reviews', 'Review', { productId: '', customerId: '', rating: 0, comment: '', createdAt: null, updatedAt: null });
+const Coupon = createJsonModel('ec_coupons', 'Coupon', { code: '', type: 'percent', value: 0, minOrder: 0, maxUses: 0, uses: 0, expiresAt: null, createdAt: null, updatedAt: null });
+const Shipment = createJsonModel('ec_shipments', 'Shipment', { orderId: '', carrier: '', trackingNumber: '', status: 'pending', estimatedDelivery: null, createdAt: null, updatedAt: null });
+module.exports = { Product, Order, Cart, Category, Vendor, Review, Coupon, Shipment };
