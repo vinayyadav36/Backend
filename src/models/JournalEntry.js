@@ -59,4 +59,11 @@ const journalEntrySchema = new mongoose.Schema(
 journalEntrySchema.index({ tenantId: 1, createdAt: -1 });
 journalEntrySchema.index({ tenantId: 1, referenceId: 1 });
 
-module.exports = mongoose.model('JournalEntry', journalEntrySchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('JournalEntry', journalEntrySchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+  module.exports = createJsonModel('journal_entries', 'JournalEntry', {
+    populateRefs: { lines: 'ledger_lines', createdBy: 'users' },
+  });
+}

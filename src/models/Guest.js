@@ -367,4 +367,25 @@ guestSchema.statics.searchGuests = async function(searchTerm, options = {}) {
     .limit(options.limit || 50);
 };
 
-module.exports = mongoose.model('Guest', guestSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('Guest', guestSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+
+  const instanceMethods = {
+    addLoyaltyPoints(points) {
+      this.loyaltyPoints = (this.loyaltyPoints || 0) + points;
+      return this.save();
+    },
+    redeemLoyaltyPoints(points) {
+      if ((this.loyaltyPoints || 0) < points) throw new Error('Insufficient loyalty points');
+      this.loyaltyPoints -= points;
+      return this.save();
+    },
+  };
+
+  module.exports = createJsonModel('guests', 'Guest', {
+    instanceMethods,
+    populateRefs: { bookings: 'bookings' },
+  });
+}

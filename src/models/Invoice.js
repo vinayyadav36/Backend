@@ -444,4 +444,12 @@ invoiceSchema.statics.calculateRevenue = async function(startDate, endDate) {
   };
 };
 
-module.exports = mongoose.model('Invoice', invoiceSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('Invoice', invoiceSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+
+  module.exports = createJsonModel('invoices', 'Invoice', {
+    populateRefs: { booking: 'bookings', guest: 'guests' },
+  });
+}

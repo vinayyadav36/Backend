@@ -1,0 +1,325 @@
+[
+  {
+    "_id": "ac7285818da09a52fdac1bcc",
+    "number": "101",
+    "type": "single",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 1,
+      "children": 0,
+      "maxOccupancy": 1
+    },
+    "rate": {
+      "baseRate": 1500,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv"
+    ],
+    "description": "Cozy single room with garden view",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2026-04-12T10:01:29.451Z"
+  },
+  {
+    "_id": "8441cceab24b170281170414",
+    "number": "102",
+    "type": "single",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 1,
+      "children": 1,
+      "maxOccupancy": 2
+    },
+    "rate": {
+      "baseRate": 1800,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar"
+    ],
+    "description": "Standard single room with city view",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "7c47e86fd1b982eea304974d",
+    "number": "103",
+    "type": "double",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 2,
+      "children": 1,
+      "maxOccupancy": 3
+    },
+    "rate": {
+      "baseRate": 2500,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe"
+    ],
+    "description": "Spacious double room with queen bed",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "2384fa6a00e46cc25c4ea67e",
+    "number": "104",
+    "type": "double",
+    "status": "occupied",
+    "floor": 1,
+    "capacity": {
+      "adults": 2,
+      "children": 2,
+      "maxOccupancy": 4
+    },
+    "rate": {
+      "baseRate": 2800,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe",
+      "bathtub"
+    ],
+    "description": "Double room with king bed and pool view",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "80e5d43f0341353ae175054f",
+    "number": "105",
+    "type": "twin",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 2,
+      "children": 0,
+      "maxOccupancy": 2
+    },
+    "rate": {
+      "baseRate": 2600,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "safe"
+    ],
+    "description": "Twin room with two single beds",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "fb4f345025109184e0ea37d7",
+    "number": "106",
+    "type": "twin",
+    "status": "occupied",
+    "floor": 1,
+    "capacity": {
+      "adults": 2,
+      "children": 1,
+      "maxOccupancy": 3
+    },
+    "rate": {
+      "baseRate": 2800,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe"
+    ],
+    "description": "Twin room with garden view",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "d4b022900a4b03bfa6bd5082",
+    "number": "107",
+    "type": "deluxe",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 2,
+      "children": 2,
+      "maxOccupancy": 4
+    },
+    "rate": {
+      "baseRate": 5000,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe",
+      "bathtub",
+      "balcony",
+      "jacuzzi"
+    ],
+    "description": "Deluxe room with private balcony and panoramic view",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "e73a27be2126a70962d5f2ba",
+    "number": "108",
+    "type": "deluxe",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 2,
+      "children": 2,
+      "maxOccupancy": 4
+    },
+    "rate": {
+      "baseRate": 5500,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe",
+      "bathtub",
+      "balcony"
+    ],
+    "description": "Deluxe room with sea-facing view",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "e2f204d77321759b4ae6f92c",
+    "number": "109",
+    "type": "suite",
+    "status": "available",
+    "floor": 1,
+    "capacity": {
+      "adults": 4,
+      "children": 2,
+      "maxOccupancy": 6
+    },
+    "rate": {
+      "baseRate": 10000,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe",
+      "bathtub",
+      "balcony",
+      "jacuzzi",
+      "kitchen",
+      "living_room"
+    ],
+    "description": "Luxury suite with separate living area and kitchenette",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "_id": "6639caf2a82cc17e59c69b42",
+    "number": "110",
+    "type": "suite",
+    "status": "occupied",
+    "floor": 1,
+    "capacity": {
+      "adults": 4,
+      "children": 4,
+      "maxOccupancy": 8
+    },
+    "rate": {
+      "baseRate": 15000,
+      "currency": "INR",
+      "seasonalRates": []
+    },
+    "amenities": [
+      "wifi",
+      "ac",
+      "tv",
+      "minibar",
+      "safe",
+      "bathtub",
+      "balcony",
+      "jacuzzi",
+      "kitchen",
+      "living_room",
+      "butler"
+    ],
+    "description": "Presidential suite with butler service and rooftop access",
+    "images": [],
+    "isActive": true,
+    "hotelId": "hotel_001",
+    "maintenanceNotes": [],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]

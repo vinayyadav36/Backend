@@ -45,4 +45,11 @@ const ledgerLineSchema = new mongoose.Schema(
 
 ledgerLineSchema.index({ journalEntry: 1, accountId: 1 });
 
-module.exports = mongoose.model('LedgerLine', ledgerLineSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('LedgerLine', ledgerLineSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+  module.exports = createJsonModel('ledger_lines', 'LedgerLine', {
+    populateRefs: { journalEntry: 'journal_entries' },
+  });
+}

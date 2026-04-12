@@ -52,4 +52,11 @@ const reconciliationSchema = new mongoose.Schema(
 
 reconciliationSchema.index({ tenantId: 1, status: 1 });
 
-module.exports = mongoose.model('Reconciliation', reconciliationSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('Reconciliation', reconciliationSchema);
+} else {
+  const { createJsonModel } = require('./JsonModel');
+  module.exports = createJsonModel('reconciliations', 'Reconciliation', {
+    populateRefs: { reviewedBy: 'users', createdBy: 'users', journalEntryId: 'journal_entries' },
+  });
+}

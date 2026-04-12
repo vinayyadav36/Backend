@@ -271,4 +271,76 @@ userSchema.statics.findByCredentials = async function(email, password) {
   return user;
 };
 
-module.exports = mongoose.model('User', userSchema);
+if (process.env.USE_JSON_DB !== 'true') {
+  module.exports = mongoose.model('User', userSchema);
+} else {
+  const bcrypt = require('bcryptjs');
+  const { createJsonModel } = require('./JsonModel');
+
+  const instanceMethods = {
+    async comparePassword(candidatePassword) {
+      if (!this.password) return false;
+      return bcrypt.compare(candidatePassword, this.password);
+    },
+    hasPermission(...perms) {
+      if (this.role === 'admin') return true;
+      if ((this.permissions || []).includes('all')) return true;
+      return perms.every(p => (this.permissions || []).includes(p));
+    },
+    hasAllPermissions(...perms) {
+      if (this.role === 'admin') return true;
+      if ((this.permissions || []).includes('all')) return true;
+      return perms.every(p => (this.permissions || []).includes(p));
+    },
+    generatePasswordResetToken() {
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+      this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+      return resetToken;
+    },
+    incrementLoginAttempts() {
+      if (this.lockUntil && this.lockUntil < Date.now()) {
+        return this.updateOne({ $set: { loginAttempts: 1 }, $unset: { lockUntil: 1 } });
+      }
+      const updates = { $inc: { loginAttempts: 1 } };
+      const maxAttempts = 5;
+      const lockTime    = 2 * 60 * 60 * 1000;
+      if ((this.loginAttempts || 0) + 1 >= maxAttempts && !this.isLocked) {
+        updates.$set = { lockUntil: Date.now() + lockTime };
+      }
+      return this.updateOne(updates);
+    },
+    resetLoginAttempts() {
+      return this.updateOne({ $set: { loginAttempts: 0 }, $unset: { lockUntil: 1 } });
+    },
+    get isLocked() {
+      return !!(this.lockUntil && this.lockUntil > Date.now());
+    },
+  };
+
+  const statics = {
+    async findByCredentials(email, password) {
+      const db = require('../config/jsonDb');
+      const raw = db.findOne('users', { email, isActive: true });
+      if (!raw) throw new Error('Invalid credentials');
+      const user = this._wrap(raw);
+      if (user.isLocked) throw new Error('Account is locked. Please try again later.');
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        await user.incrementLoginAttempts();
+        throw new Error('Invalid credentials');
+      }
+      if (user.loginAttempts > 0) await user.resetLoginAttempts();
+      return user;
+    },
+  };
+
+  const preSave = async function() {
+    // Hash password if it is new or modified (simple check: doesn't look like a bcrypt hash)
+    if (this.password && !this.password.startsWith('$2')) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  };
+
+  module.exports = createJsonModel('users', 'User', { instanceMethods, statics, preSave });
+}
