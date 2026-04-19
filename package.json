@@ -8,7 +8,10 @@
     "dev": "nodemon Server.js",
     "lint": "eslint src/ --ext .js",
     "test": "jest --testPathPattern=src/__tests__ --forceExit",
-    "test:ci": "jest --testPathPattern=src/__tests__ --forceExit --ci --reporters=default --reporters=jest-junit"
+    "test:ci": "jest --testPathPattern=src/__tests__ --forceExit --ci --reporters=default --reporters=jest-junit",
+    "seed": "node src/scripts/seedAllModules.js",
+    "seed:pos": "node src/scripts/seedAllModules.js",
+    "db:init": "node src/scripts/seedAllModules.js"
   },
   "jest-junit": {
     "outputDirectory": "./reports/junit",

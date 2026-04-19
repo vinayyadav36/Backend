@@ -36,6 +36,20 @@ const reportsRoutes = require('./routes/reportsRoutes');
 const reconcileRoutes = require('./routes/reconcileRoutes');
 const pdfRoutes = require('./routes/pdfRoutes');
 
+// Multi-platform module routes
+const universityRoutes = require('./modules/university/routes');
+const erpRoutes = require('./modules/erp/routes');
+const ecommerceRoutes = require('./modules/ecommerce/routes');
+const marketingRoutes = require('./modules/marketing/routes');
+const hrRoutes = require('./modules/hr/routes');
+const crmRoutes = require('./modules/crm/routes');
+const tradingRoutes = require('./modules/trading/routes');
+const portfolioRoutes = require('./modules/portfolio/routes');
+const posRoutes = require('./modules/pos/routes');
+const agencyRoutes = require('./modules/agency/routes');
+const examRoutes = require('./modules/exam/routes');
+const dashboardRoutes = require('./modules/dashboard/routes');
+
 // Jarvis: audit middleware (Deliverable F)
 const auditMiddleware = require('./middlewares/auditMiddleware');
 const requestId = require('./middlewares/requestIdMiddleware');
@@ -398,6 +412,20 @@ app.use(`/api/${apiVersion}/jarvis`, apiLimiter, jarvisRoutes);
 app.use(`/api/${apiVersion}/reports`, apiLimiter, reportsRoutes);
 app.use(`/api/${apiVersion}/reconcile`, apiLimiter, auditMiddleware, reconcileRoutes);
 app.use(`/api/${apiVersion}/pdf`, apiLimiter, pdfRoutes);
+
+// ── Multi-Platform Modules ─────────────────────────────────────────────────
+app.use(`/api/${apiVersion}/university`, apiLimiter, universityRoutes);
+app.use(`/api/${apiVersion}/erp`, apiLimiter, erpRoutes);
+app.use(`/api/${apiVersion}/ecommerce`, apiLimiter, ecommerceRoutes);
+app.use(`/api/${apiVersion}/marketing`, apiLimiter, marketingRoutes);
+app.use(`/api/${apiVersion}/hr`, apiLimiter, hrRoutes);
+app.use(`/api/${apiVersion}/crm`, apiLimiter, crmRoutes);
+app.use(`/api/${apiVersion}/trading`, apiLimiter, tradingRoutes);
+app.use(`/api/${apiVersion}/portfolio`, apiLimiter, portfolioRoutes);
+app.use(`/api/${apiVersion}/pos`, apiLimiter, posRoutes);
+app.use(`/api/${apiVersion}/agency`, apiLimiter, agencyRoutes);
+app.use(`/api/${apiVersion}/exam`, apiLimiter, examRoutes);
+app.use(`/api/${apiVersion}/dashboard`, apiLimiter, dashboardRoutes);
 
 // ==========================================
 // ERROR HANDLING MIDDLEWARE
