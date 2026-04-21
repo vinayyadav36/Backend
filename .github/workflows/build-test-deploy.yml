@@ -51,11 +51,13 @@ jobs:
         run: npm ci
 
       - name: Lint — Express app
-        run: npm run lint --if-present || echo "Non-blocking legacy lint issues detected in Express app"
+        continue-on-error: true
+        run: npm run lint --if-present
 
       - name: Lint — NestJS Gateway
         working-directory: apps/api-gateway-nest
-        run: npm run lint --if-present || echo "Non-blocking legacy lint issues detected in NestJS Gateway"
+        continue-on-error: true
+        run: npm run lint --if-present
 
       - name: Test — Express app
         run: npm run test:ci
