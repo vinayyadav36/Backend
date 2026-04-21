@@ -35,7 +35,7 @@ jobs:
         if: always()
         run: |
           if [ "${{ steps.lint_express.outcome }}" = "failure" ]; then
-            echo "::warning::Express lint has violations. This run is advisory while legacy issues are being remediated."
+            echo "::warning::Express lint has violations. This run is advisory while legacy issues are being resolved."
           fi
           if [ "${{ steps.lint_nest.outcome }}" = "failure" ]; then
             echo "::warning::NestJS lint has violations. This run is advisory while lint tooling is being fully aligned."
