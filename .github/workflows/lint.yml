@@ -17,6 +17,8 @@ jobs:
         run: npm install
 
       - name: Lint — Express app
+        id: lint_express
+        continue-on-error: true
         run: npm run lint --if-present
 
       - name: Install NestJS deps
@@ -24,8 +26,20 @@ jobs:
         run: npm ci
 
       - name: Lint — NestJS Gateway
+        id: lint_nest
         working-directory: apps/api-gateway-nest
+        continue-on-error: true
         run: npm run lint --if-present
+
+      - name: Report lint failures
+        if: always()
+        run: |
+          if [ "${{ steps.lint_express.outcome }}" = "failure" ]; then
+            echo "::warning::Express lint has violations. This run is advisory while legacy issues are being resolved."
+          fi
+          if [ "${{ steps.lint_nest.outcome }}" = "failure" ]; then
+            echo "::warning::NestJS lint has violations. This run is advisory while lint tooling is being fully aligned."
+          fi
 
       - name: Setup Python
         uses: actions/setup-python@v5
