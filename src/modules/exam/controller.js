@@ -248,7 +248,7 @@ const ctrl = {
       let score = 0;
       const test = db.findById('exam_tests', attempt.testId);
       if (test && test.questions) {
-        test.questions.forEach((q, i) => {
+        test.questions.forEach((q, _i) => {
           if (answers[q._id] === q.correctAnswer) score += q.marks || 1;
         });
       }

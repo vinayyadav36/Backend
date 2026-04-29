@@ -122,6 +122,7 @@ const DashboardService = {
     const campaigns = db.find('mkt_campaigns', {});
     const leads = db.find('crm_leads', {});
     const analytics = db.find('mkt_analytics', {});
+    const analyticsCount = analytics.length;
     
     const channelStats = {};
     campaigns.forEach(c => {
@@ -134,6 +135,7 @@ const DashboardService = {
       leadsGenerated: leads.length,
       channelStats,
       totalSpent: campaigns.reduce((s, c) => s + (c.spent || 0), 0),
+      analyticsEvents: analyticsCount,
     };
   },
 

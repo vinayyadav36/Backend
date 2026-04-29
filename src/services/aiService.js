@@ -10,10 +10,6 @@ const logger = require('../config/logger');
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
-function dateToOrdinal(dateStr) {
-  return Math.floor(new Date(dateStr).getTime() / 86400000);
-}
-
 function mean(arr) {
   if (!arr || arr.length === 0) return 0;
   return arr.reduce((s, v) => s + v, 0) / arr.length;

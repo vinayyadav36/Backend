@@ -1,4 +1,4 @@
-const { Employee, HRAttendance, Leave, Payroll, Performance } = require('./model');
+const { Employee, Leave, Performance } = require('./model');
 const logger = require('../../config/logger');
 
 const calculatePayroll = async (empId, month, year) => {

@@ -298,7 +298,7 @@ const ctrl = {
 
   getTimeEntries: async (req, res) => {
     try {
-      const { projectId, userId, startDate, endDate } = req.query;
+      const { projectId, userId } = req.query;
       let entries = db.find('agency_time_entries', {});
       if (projectId) entries = entries.filter(e => e.projectId === projectId);
       if (userId) entries = entries.filter(e => e.userId === userId);
@@ -324,7 +324,6 @@ const ctrl = {
   getRevenueReport: async (req, res) => {
     try {
       const invoices = db.find('agency_invoices', {});
-      const now = new Date();
       const monthly = {};
       
       invoices.forEach(inv => {

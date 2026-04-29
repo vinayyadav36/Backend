@@ -752,7 +752,7 @@ const getRoomPerformance = async (req, res) => {
 
     if (process.env.USE_JSON_DB === 'true') {
       const allBookings = await Booking.find({});
-      const allRooms    = await Room.find({ isActive: true });
+      const _allRooms   = await Room.find({ isActive: true });
       const filtered = allBookings.filter(b =>
         new Date(b.createdAt) >= startDate &&
         ['confirmed','checked-in','checked-out'].includes(b.status)

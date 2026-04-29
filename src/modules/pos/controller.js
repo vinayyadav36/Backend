@@ -1,6 +1,6 @@
 'use strict';
 const POSService = require('./service');
-const { POSProduct, POSCategory, POSSale, POSCustomer, POSSupplier, POSExpense, POSPurchase, POSTable, POSOrder, POSSettings } = require('./model');
+const { POSProduct, POSSale, POSCustomer, POSSupplier } = require('./model');
 const db = require('../../config/jsonDb');
 
 const ctrl = {
@@ -14,7 +14,7 @@ const ctrl = {
   getProducts: async (req, res) => {
     try {
       const { category, search, lowStock } = req.query;
-      let query = { isActive: true };
+      const query = { isActive: true };
       if (category) query.category = category;
       if (search) query.$or = [{ name: { $regex: search } }, { sku: { $regex: search } }, { barcode: { $regex: search } }];
       const products = lowStock === 'true' ? db.find('pos_products', {}).filter(p => p.stock <= p.reorderLevel) : db.find('pos_products', query);

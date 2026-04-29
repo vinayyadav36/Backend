@@ -4,20 +4,20 @@ const router = express.Router();
 const { protect } = require('../../middlewares/authMiddleware');
 const ctrl = require('./controller');
 
-router.get('/aggregated', ctrl.getAggregatedDashboard);
-router.get('/sales', ctrl.getSalesData);
-router.get('/revenue', ctrl.getRevenueData);
-router.get('/inventory', ctrl.getInventoryData);
-router.get('/hr', ctrl.getHRData);
-router.get('/marketing', ctrl.getMarketingData);
-router.get('/crm', ctrl.getCRMData);
-router.get('/trading', ctrl.getTradingData);
-router.get('/pos', ctrl.getPOSData);
-router.get('/university', ctrl.getUniversityData);
-router.get('/gst-summary', ctrl.getGSTSummary);
+router.get('/aggregated', protect, ctrl.getAggregatedDashboard);
+router.get('/sales', protect, ctrl.getSalesData);
+router.get('/revenue', protect, ctrl.getRevenueData);
+router.get('/inventory', protect, ctrl.getInventoryData);
+router.get('/hr', protect, ctrl.getHRData);
+router.get('/marketing', protect, ctrl.getMarketingData);
+router.get('/crm', protect, ctrl.getCRMData);
+router.get('/trading', protect, ctrl.getTradingData);
+router.get('/pos', protect, ctrl.getPOSData);
+router.get('/university', protect, ctrl.getUniversityData);
+router.get('/gst-summary', protect, ctrl.getGSTSummary);
 
-router.post('/export/excel', ctrl.exportToExcel);
-router.post('/export/csv', ctrl.exportToCSV);
-router.get('/powerbi/embed', ctrl.getPowerBIEmbedToken);
+router.post('/export/excel', protect, ctrl.exportToExcel);
+router.post('/export/csv', protect, ctrl.exportToCSV);
+router.get('/powerbi/embed', protect, ctrl.getPowerBIEmbedToken);
 
 module.exports = router;

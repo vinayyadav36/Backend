@@ -7,7 +7,6 @@
 'use strict';
 
 const PDFDocument = require('pdfkit');
-const logger = require('../config/logger');
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const COLOR_PRIMARY  = '#1E3A5F';
@@ -231,7 +230,7 @@ const generateInvoicePdf = (invoice, booking, guest, room) => {
     ];
 
     let ty = doc.y;
-    totalsRows.forEach(([label, value], i) => {
+    totalsRows.forEach(([label, value], _i) => {
       const isTotal = label === 'TOTAL';
       const isDue   = label === 'Balance Due';
       if (isTotal) drawHRule(doc, ty, COLOR_PRIMARY);

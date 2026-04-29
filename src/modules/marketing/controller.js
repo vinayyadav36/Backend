@@ -1,6 +1,5 @@
 'use strict';
 const { MktClient, MktCampaign, Content, SocialPost, SEO, Analytics, MktInvoice } = require('./model');
-const logger = require('../../config/logger');
 
 const getClients = async (req, res) => { try { const data = await MktClient.find({}).lean(); res.json({ success: true, data }); } catch (e) { res.status(500).json({ success: false, message: e.message }); } };
 const getClient = async (req, res) => { try { const data = await MktClient.findById(req.params.id); if (!data) return res.status(404).json({ success: false, message: 'Not found' }); res.json({ success: true, data }); } catch (e) { res.status(500).json({ success: false, message: e.message }); } };

@@ -11,7 +11,6 @@ const ExcelJS = require('exceljs');
 // ─── Design helpers ───────────────────────────────────────────────────────────
 
 const PRIMARY_COLOR = '1E3A5F';
-const ACCENT_COLOR  = '2E86AB';
 const LIGHT_BG      = 'F0F4F8';
 
 function applyHeaderStyle(row) {
