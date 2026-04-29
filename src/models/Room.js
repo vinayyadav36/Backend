@@ -574,7 +574,6 @@ if (process.env.USE_JSON_DB !== 'true') {
     async getOccupancyStats(startDate, endDate) {
       const totalRooms = db.count('rooms', { isActive: true });
       const totalDays  = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-      const Booking    = require('./Booking');
       const bookings   = db.find('bookings', {
         status: { $in: ['confirmed', 'checked-in', 'checked-out'] },
         $or: [

@@ -7,8 +7,59 @@ on:
     branches: [main]
 
 jobs:
-  build-test-deploy:
+  # ── Job 1: Express API — lint + test (runs in parallel with jobs 2 & 3) ──────
+  test-express:
+    name: Express — Lint & Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    services:
+      mongodb:
+        image: mongo:7
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd="mongosh --eval \"db.adminCommand('ping')\""
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test:ci
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/test
+          JWT_SECRET: test-secret-ci
+          JWT_REFRESH_SECRET: test-refresh-secret-ci
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: express-junit-report
+          path: reports/junit/junit.xml
+          if-no-files-found: warn
+
+  # ── Job 2: NestJS Gateway — lint + test (runs in parallel) ──────────────────
+  test-nest:
+    name: NestJS Gateway — Lint & Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     services:
       postgres:
@@ -24,70 +75,24 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-      mongodb:
-        image: mongo:7
-        ports: ["27017:27017"]
-        options: >-
-          --health-cmd="mongosh --eval \"db.adminCommand('ping')\""
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: apps/api-gateway-nest/package-lock.json
 
-      - name: Install root dependencies
-        run: npm install
-
-      - name: Install NestJS Gateway dependencies
+      - name: Install dependencies
         working-directory: apps/api-gateway-nest
         run: npm ci
 
-      - name: Lint — Express app
-        id: lint_express
-        continue-on-error: true
-        run: npm run lint --if-present
-
-      - name: Lint — NestJS Gateway
-        id: lint_nest
+      - name: Lint
         working-directory: apps/api-gateway-nest
-        continue-on-error: true
         run: npm run lint --if-present
 
-      - name: Report lint failures
-        if: always()
-        run: |
-          if [ "${{ steps.lint_express.outcome }}" = "failure" ]; then
-            echo "::warning::Express lint has violations. This pipeline remains non-blocking for legacy lint debt."
-          fi
-          if [ "${{ steps.lint_nest.outcome }}" = "failure" ]; then
-            echo "::warning::NestJS lint has violations. This pipeline remains non-blocking while lint tooling is aligned."
-          fi
-
-      - name: Test — Express app
-        run: npm run test:ci
-        env:
-          NODE_ENV: test
-          MONGODB_URI: mongodb://localhost:27017/test
-          JWT_SECRET: test-secret-ci
-          JWT_REFRESH_SECRET: test-refresh-secret-ci
-
-      - name: Upload Express test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: express-junit-report
-          path: reports/junit/junit.xml
-          if-no-files-found: warn
-
-      - name: Test — NestJS Gateway
+      - name: Test
         working-directory: apps/api-gateway-nest
         run: npm test --if-present -- --passWithNoTests
         env:
@@ -98,42 +103,69 @@ jobs:
           DB_PASSWORD: postgres
           DB_NAME: jarvis_test
 
-      - name: Build — Express API Docker image
-        if: github.ref == 'refs/heads/main'
+  # ── Job 3: ML FastAPI — lint (runs in parallel) ──────────────────────────────
+  lint-ml:
+    name: ML Agent — Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Lint (flake8)
+        working-directory: apps/ml-agent-fastapi
+        run: |
+          pip install flake8
+          flake8 . --max-line-length=120 --exclude=__pycache__,generated --ignore=E501,W503
+
+  # ── Job 4: Build Docker images & deploy (only on main, after all tests pass) ─
+  build-deploy:
+    name: Build & Deploy
+    needs: [test-express, test-nest, lint-ml]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build — Express API
         run: |
           docker build \
             -t ${{ secrets.ACR_LOGIN_SERVER }}/api:${{ github.sha }} \
             .
 
-      - name: Build — NestJS Gateway Docker image
-        if: github.ref == 'refs/heads/main'
+      - name: Build — NestJS Gateway
         run: |
           docker build \
             -t ${{ secrets.ACR_LOGIN_SERVER }}/api-gateway:${{ github.sha }} \
             ./apps/api-gateway-nest
 
-      - name: Build — ML Agent Docker image
-        if: github.ref == 'refs/heads/main'
+      - name: Build — ML Agent
         run: |
           docker build \
             -t ${{ secrets.ACR_LOGIN_SERVER }}/ml-agent:${{ github.sha }} \
             ./apps/ml-agent-fastapi
 
-      - name: Build — Worker Service Docker image
-        if: github.ref == 'refs/heads/main'
+      - name: Build — Worker Service
         run: |
           docker build \
             -t ${{ secrets.ACR_LOGIN_SERVER }}/worker-service:${{ github.sha }} \
             ./apps/worker-service
 
       - name: Login to Azure
-        if: github.ref == 'refs/heads/main'
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Push images to ACR
-        if: github.ref == 'refs/heads/main'
         run: |
           az acr login --name ${{ secrets.ACR_NAME }}
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/api:${{ github.sha }}
@@ -142,7 +174,6 @@ jobs:
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/worker-service:${{ github.sha }}
 
       - name: Set AKS context
-        if: github.ref == 'refs/heads/main'
         uses: azure/aks-set-context@v3
         with:
           resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
@@ -150,7 +181,6 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy via Helm
-        if: github.ref == 'refs/heads/main'
         run: |
           helm upgrade --install backend-suite ./infra/k8s/helm \
             --namespace backend \

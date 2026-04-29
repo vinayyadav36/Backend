@@ -1,5 +1,5 @@
 const { Student, Course, Faculty, Enrollment, Department, ExamSchedule, Attendance } = require('./model');
-const { calculateGPA, validateEnrollment, trackAttendance, getStudentSummary } = require('./service');
+const { validateEnrollment, getStudentSummary } = require('./service');
 const logger = require('../../config/logger');
 
 // Students

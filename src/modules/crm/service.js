@@ -1,4 +1,4 @@
-const { Lead, Deal, Campaign, SupportTicket } = require('./model');
+const { Deal, Campaign, SupportTicket } = require('./model');
 const logger = require('../../config/logger');
 
 const scoreLead = (lead) => {

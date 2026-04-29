@@ -3,8 +3,11 @@ name: Lint
 on: [push, pull_request]
 
 jobs:
-  lint:
+  lint-express:
+    name: Express — Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -13,41 +16,48 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install root dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Lint — Express app
-        id: lint_express
-        continue-on-error: true
-        run: npm run lint --if-present
+      - name: Lint
+        run: npm run lint
 
-      - name: Install NestJS deps
+  lint-nest:
+    name: NestJS Gateway — Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: apps/api-gateway-nest/package-lock.json
+
+      - name: Install dependencies
         working-directory: apps/api-gateway-nest
         run: npm ci
 
-      - name: Lint — NestJS Gateway
-        id: lint_nest
+      - name: Lint
         working-directory: apps/api-gateway-nest
-        continue-on-error: true
         run: npm run lint --if-present
 
-      - name: Report lint failures
-        if: always()
-        run: |
-          if [ "${{ steps.lint_express.outcome }}" = "failure" ]; then
-            echo "::warning::Express lint has violations. This run is advisory while legacy issues are being resolved."
-          fi
-          if [ "${{ steps.lint_nest.outcome }}" = "failure" ]; then
-            echo "::warning::NestJS lint has violations. This run is advisory while lint tooling is being fully aligned."
-          fi
+  lint-ml:
+    name: ML Agent — Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Lint — FastAPI (flake8)
+      - name: Lint (flake8)
         working-directory: apps/ml-agent-fastapi
         run: |
           pip install flake8
-          flake8 . --max-line-length=120 --exclude=__pycache__ --ignore=E501,W503 || true
+          flake8 . --max-line-length=120 --exclude=__pycache__,generated --ignore=E501,W503

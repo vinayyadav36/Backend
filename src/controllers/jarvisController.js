@@ -96,7 +96,7 @@ const getInsights = async (req, res) => {
     const cutoff60 = new Date(Date.now() - 60 * 86400000);
 
     let recentRevData  = [];
-    let occupancyData  = [];
+    const occupancyData  = [];
     let totalRooms     = 0;
 
     try {

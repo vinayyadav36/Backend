@@ -2,7 +2,7 @@ const { Coupon, Product, Order, Cart } = require('./model');
 const logger = require('../../config/logger');
 
 const calculateOrderTotal = async (items, couponCode) => {
-  let subtotal = items.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+  const subtotal = items.reduce((sum, i) => sum + (i.price * i.quantity), 0);
   let discount = 0;
   if (couponCode) {
     const coupon = await Coupon.findOne({ code: couponCode }).lean();

@@ -9,20 +9,6 @@ const generateInvoiceNumber = (prefix = 'INV') => {
   return `${prefix}${year}${month}${random}`;
 };
 
-const calculateGST = (amount, rate, gstType, placeOfSupply, businessStateCode) => {
-  const taxableAmount = amount;
-  let cgst = 0, sgst = 0, igst = 0;
-  
-  if (gstType === 'intra-state' || placeOfSupply === businessStateCode) {
-    cgst = (taxableAmount * rate) / 200;
-    sgst = (taxableAmount * rate) / 200;
-  } else {
-    igst = (taxableAmount * rate) / 100;
-  }
-  
-  return { cgst, sgst, igst, totalGST: cgst + sgst + igst, taxableAmount };
-};
-
 const calculateItemGST = (item, gstRate, gstType, businessStateCode) => {
   const taxableAmount = item.quantity * item.rate;
   const discount = item.discount || 0;
@@ -74,7 +60,7 @@ const POSService = {
     
     const items = data.items.map(item => {
       const itemSubtotal = item.quantity * item.rate;
-      const discount = item.discount || 0;
+      const _discount = item.discount || 0;
       subtotal += itemSubtotal;
       
       const { taxableAmount: tx, cgst: c, sgst: s, igst: i, totalGST } = calculateItemGST(
@@ -223,7 +209,7 @@ const POSService = {
 
   async getProfitReport(startDate, endDate) {
     const sales = db.find('pos_sales', {});
-    const purchases = db.find('pos_purchases', {});
+    const _purchases = db.find('pos_purchases', {});
     const expenses = db.find('pos_expenses', {});
     
     const filteredSales = sales.filter(s => {

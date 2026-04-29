@@ -1,10 +1,10 @@
 const { Product, Order, Cart, Category, Vendor, Review, Coupon, Shipment } = require('./model');
-const { calculateOrderTotal, validateCoupon: svcValidateCoupon, updateInventory, processCheckout } = require('./service');
+const { calculateOrderTotal, validateCoupon: svcValidateCoupon } = require('./service');
 const logger = require('../../config/logger');
 
 const getProducts = async (req, res) => {
   try {
-    const { search, category, sort, page = 1, limit = 20 } = req.query;
+    const { search, category, page = 1, limit = 20 } = req.query;
     let items = await Product.find({}).lean();
     if (search) items = items.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
     if (category) items = items.filter(p => p.category === category);

@@ -1,5 +1,5 @@
 const { Contact, Lead, Deal, Activity, Pipeline, Campaign, SupportTicket } = require('./model');
-const { scoreLead: svcScoreLead, advanceStage, calculateCampaignROI, getSLAStatus } = require('./service');
+const { scoreLead: svcScoreLead, calculateCampaignROI } = require('./service');
 const logger = require('../../config/logger');
 
 const mk = (Model) => ({

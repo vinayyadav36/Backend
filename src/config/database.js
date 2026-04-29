@@ -76,6 +76,7 @@ const connectDB = async () => {
       logger.error('❌ Database connection failed:', error.message);
       logger.error('Stack:', error.stack);
     } else {
+      // eslint-disable-next-line no-console
       console.error('❌ Database connection failed:', error.message);
     }
 
