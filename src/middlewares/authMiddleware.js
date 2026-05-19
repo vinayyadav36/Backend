@@ -1,12 +1,13 @@
 /**
  * Authentication & Authorization Middleware
- * Handles JWT verification, role-based access control, and permissions
- * @version 1.0.0
+ * Handles JWT verification, role-based access control, permissions, and Master Admin
+ * @version 2.0.0
  */
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const logger = require('../config/logger');
+const { getMasterAdmin } = require('./masterAdmin');
 
 /**
  * Protect routes - Verify JWT token and attach user to request
@@ -44,6 +45,32 @@ const protect = async (req, res, next) => {
       });
     }
 
+    // Check if this is a Master Admin token
+    if (decoded.isMasterAdmin || decoded.type === 'master_admin') {
+      const admin = getMasterAdmin();
+      if (!admin || admin.status !== 'active') {
+        return res.status(403).json({
+          success: false,
+          message: 'Master Admin account is not active.'
+        });
+      }
+      req.user = {
+        id: admin._id,
+        _id: admin._id,
+        type: 'master_admin',
+        role: 'master_admin',
+        permissions: ['all'],
+        email: 'master@jarvis.local',
+        name: 'Master Admin',
+        hotelId: req.tenantId || 'global',
+        isMasterAdmin: true,
+        masterAdmin: admin,
+        impersonatingTenant: req.tenantId || null,
+      };
+      logger.info(`Master Admin authenticated: ${req.originalUrl}`);
+      return next();
+    }
+
     // Get user from token (exclude sensitive fields)
     const user = await User.findById(decoded.userId || decoded.id)
       .select('-password -refreshToken -otpCode -otpExpires')
@@ -69,6 +96,7 @@ const protect = async (req, res, next) => {
     // Attach user info to request
     req.user = {
       id: user._id,
+      _id: user._id,
       email: user.email,
       name: user.name,
       role: user.role,

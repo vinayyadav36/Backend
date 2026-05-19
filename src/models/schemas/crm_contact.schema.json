@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CRMContact",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "email": { "type": "string", "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" },
+    "phone": { "type": "string" },
+    "company": { "type": "string" },
+    "gstin": { "type": "string" },
+    "source": { "type": "string" },
+    "tags": { "type": "array", "itemSchema": { "type": "string" } },
+    "assignedTo": { "type": "string" }
+  }
+}

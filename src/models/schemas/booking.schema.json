@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Booking",
+  "type": "object",
+  "required": ["guest", "room", "checkInDate", "checkOutDate", "totalAmount"],
+  "properties": {
+    "guest": { "type": "string" },
+    "room": { "type": "string" },
+    "checkInDate": { "type": "date" },
+    "checkOutDate": { "type": "date" },
+    "adults": { "type": "number", "minimum": 1, "maximum": 10 },
+    "children": { "type": "number", "minimum": 0, "maximum": 10 },
+    "status": { "type": "string", "enum": ["pending", "confirmed", "checked-in", "checked-out", "cancelled", "no-show"] },
+    "totalAmount": { "type": "number", "minimum": 0 },
+    "paidAmount": { "type": "number", "minimum": 0 },
+    "paymentStatus": { "type": "string", "enum": ["pending", "partial", "paid", "refunded", "failed"] },
+    "source": { "type": "string" }
+  }
+}

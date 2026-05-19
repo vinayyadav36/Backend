@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LedgerEntry",
+  "type": "object",
+  "required": ["debit", "credit", "narration"],
+  "properties": {
+    "tenant_id": { "type": "string" },
+    "date": { "type": "date" },
+    "debit": {
+      "type": "array",
+      "itemSchema": {
+        "type": "object",
+        "properties": {
+          "account": { "type": "string" },
+          "amount": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "credit": {
+      "type": "array",
+      "itemSchema": {
+        "type": "object",
+        "properties": {
+          "account": { "type": "string" },
+          "amount": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "narration": { "type": "string" },
+    "source": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["invoice", "payment", "journal", "pos"] },
+        "ref_id": { "type": "string" }
+      }
+    },
+    "posted_by": { "type": "string" }
+  }
+}

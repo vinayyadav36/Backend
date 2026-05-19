@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuditEvent",
+  "type": "object",
+  "required": ["action", "timestamp"],
+  "properties": {
+    "actor_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "action": { "type": "string" },
+    "resource_type": { "type": "string" },
+    "resource_id": { "type": "string" },
+    "timestamp": { "type": "date" },
+    "hash": { "type": "string" },
+    "hash_chain": { "type": "string" },
+    "statusCode": { "type": "number" },
+    "ip": { "type": "string" },
+    "userAgent": { "type": "string" }
+  }
+}

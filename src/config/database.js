@@ -1,204 +1,163 @@
-/**
- * MongoDB Database Configuration
- * Handles connection, pooling, events, and health checks
- * @version 1.0.0
- */
+const path = require('path');
+const fs = require('fs');
 
-const mongoose = require('mongoose');
-
-// Will be initialized after logger is created
 let logger;
 
-/**
- * Initialize database connection with retry logic
- * @returns {Promise<void>}
- */
 const connectDB = async () => {
-  try {
-    // Lazy load logger to avoid circular dependency
-    if (!logger) {
-      logger = require('./logger');
+  if (process.env.USE_JSON_DB === 'true') {
+    const dataDir = path.resolve(__dirname, '../../data');
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
     }
+    const backupsDir = path.join(dataDir, 'backups');
+    if (!fs.existsSync(backupsDir)) {
+      fs.mkdirSync(backupsDir, { recursive: true });
+    }
+    if (!logger) logger = require('./logger');
+    logger.info('JSON NoSQL mode — data directory ready');
+    return;
+  }
 
-    // Mongoose configuration
+  try {
+    if (!logger) logger = require('./logger');
+
+    const mongoose = require('mongoose');
+
     mongoose.set('strictQuery', false);
     mongoose.set('debug', process.env.NODE_ENV === 'development');
 
-    // Connection options
     const options = {
-      // Connection pool settings
-      maxPoolSize: process.env.NODE_ENV === 'production' 
-        ? parseInt(process.env.DB_POOL_SIZE) || 50 
+      maxPoolSize: process.env.NODE_ENV === 'production'
+        ? parseInt(process.env.DB_POOL_SIZE) || 50
         : 10,
       minPoolSize: parseInt(process.env.DB_MIN_POOL_SIZE) || 5,
-      
-      // Timeout settings
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       connectTimeoutMS: 10000,
-      
-      // Retry settings
       retryWrites: true,
       retryReads: true,
-      
-      // Network settings
-      family: 4, // Use IPv4, skip trying IPv6
-      
-      // Compression
+      family: 4,
       compressors: process.env.NODE_ENV === 'production' ? ['zlib'] : undefined,
-      
-      // Auto index (disable in production for performance)
       autoIndex: process.env.NODE_ENV !== 'production',
-      
-      // Auth (if credentials in URI)
       authSource: 'admin',
     };
 
-    // Connect to MongoDB
     const conn = await mongoose.connect(process.env.MONGODB_URI, options);
 
-    logger.info('✅ MongoDB Connected Successfully');
-    logger.info(`📍 Host: ${conn.connection.host}`);
-    logger.info(`🗄️  Database: ${conn.connection.name}`);
-    logger.info(`🔗 Pool Size: ${options.maxPoolSize}`);
-    logger.info(`🌍 Environment: ${process.env.NODE_ENV}`);
+    logger.info('MongoDB Connected Successfully');
+    logger.info(`Host: ${conn.connection.host}`);
+    logger.info(`Database: ${conn.connection.name}`);
+    logger.info(`Pool Size: ${options.maxPoolSize}`);
 
-    // Setup connection event handlers
     setupConnectionHandlers();
 
-    // Create indexes if in development
     if (process.env.NODE_ENV === 'development') {
       await ensureIndexes();
     }
-
   } catch (error) {
     if (logger) {
-      logger.error('❌ Database connection failed:', error.message);
-      logger.error('Stack:', error.stack);
+      logger.error('Database connection failed:', error.message);
     } else {
-      // eslint-disable-next-line no-console
-      console.error('❌ Database connection failed:', error.message);
+      console.error('Database connection failed:', error.message); // eslint-disable-line no-console
     }
 
-    // Retry connection after delay
-    logger?.info('⏳ Retrying connection in 5 seconds...');
+    logger?.info('Retrying connection in 5 seconds...');
     setTimeout(connectDB, 5000);
   }
 };
 
-/**
- * Setup MongoDB connection event handlers
- */
 const setupConnectionHandlers = () => {
-  // Connection error handler
+  if (process.env.USE_JSON_DB === 'true') return;
+  const mongoose = require('mongoose');
+
   mongoose.connection.on('error', (err) => {
-    logger.error('❌ MongoDB connection error:', err);
+    logger.error('MongoDB connection error:', err);
   });
 
-  // Disconnection handler
   mongoose.connection.on('disconnected', () => {
-    logger.warn('⚠️  MongoDB disconnected. Attempting to reconnect...');
+    logger.warn('MongoDB disconnected. Attempting to reconnect...');
   });
 
-  // Reconnection handler
   mongoose.connection.on('reconnected', () => {
-    logger.info('✅ MongoDB reconnected successfully');
+    logger.info('MongoDB reconnected successfully');
   });
 
-  // Connection state changes
   mongoose.connection.on('connecting', () => {
-    logger.info('🔄 Connecting to MongoDB...');
+    logger.info('Connecting to MongoDB...');
   });
 
   mongoose.connection.on('connected', () => {
-    logger.info('🔗 MongoDB connection established');
+    logger.info('MongoDB connection established');
   });
-
-  // Index build events (production)
-  if (process.env.NODE_ENV === 'production') {
-    mongoose.connection.on('index', (indexInfo) => {
-      logger.info('📇 Index created:', indexInfo);
-    });
-  }
-
-  // Monitor slow queries in development
-  if (process.env.NODE_ENV === 'development') {
-    mongoose.set('debug', (collectionName, method, query, doc) => {
-      logger.debug(`MongoDB Query: ${collectionName}.${method}`, {
-        query: JSON.stringify(query),
-        doc: doc ? JSON.stringify(doc) : undefined,
-      });
-    });
-  }
 };
 
-/**
- * Ensure all indexes are created (development only)
- */
 const ensureIndexes = async () => {
+  if (process.env.USE_JSON_DB === 'true') return;
   try {
-    logger.info('🔍 Checking indexes...');
-    
+    const mongoose = require('mongoose');
+    logger.info('Checking indexes...');
     const collections = Object.keys(mongoose.connection.collections);
-    
     for (const collectionName of collections) {
       const collection = mongoose.connection.collections[collectionName];
       await collection.createIndexes();
     }
-    
-    logger.info(`✅ Indexes ensured for ${collections.length} collections`);
+    logger.info(`Indexes ensured for ${collections.length} collections`);
   } catch (error) {
-    logger.error('❌ Error ensuring indexes:', error.message);
+    logger.error('Error ensuring indexes:', error.message);
   }
 };
 
-/**
- * Get database health status
- * @returns {Object} Health status object
- */
 const getDBHealth = () => {
+  if (process.env.USE_JSON_DB === 'true') {
+    const dataDir = path.resolve(__dirname, '../../data');
+    const files = fs.existsSync(dataDir) ? fs.readdirSync(dataDir).filter(f => f.endsWith('.json')) : [];
+    return {
+      status: 'connected',
+      mode: 'json_nosql',
+      collections: files.length,
+      dataDirectory: dataDir,
+    };
+  }
+
+  const mongoose = require('mongoose');
   const state = mongoose.connection.readyState;
-  const states = {
-    0: 'disconnected',
-    1: 'connected',
-    2: 'connecting',
-    3: 'disconnecting',
-  };
+  const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
 
   return {
     status: states[state] || 'unknown',
-    state: state,
+    state,
     host: mongoose.connection.host || 'N/A',
     name: mongoose.connection.name || 'N/A',
-    port: mongoose.connection.port || 'N/A',
-    collections: mongoose.connection.collections 
-      ? Object.keys(mongoose.connection.collections).length 
-      : 0,
-    models: Object.keys(mongoose.models).length,
+    mode: 'mongodb',
   };
 };
 
-/**
- * Get database statistics
- * @returns {Promise<Object>} Database statistics
- */
 const getDBStats = async () => {
-  try {
-    if (mongoose.connection.readyState !== 1) {
-      return { error: 'Database not connected' };
-    }
+  if (process.env.USE_JSON_DB === 'true') {
+    const dataDir = path.resolve(__dirname, '../../data');
+    const files = fs.existsSync(dataDir) ? fs.readdirSync(dataDir).filter(f => f.endsWith('.json')) : [];
+    let totalSize = 0;
+    const collections = files.map(f => {
+      const fp = path.join(dataDir, f);
+      const stat = fs.statSync(fp);
+      totalSize += stat.size;
+      return { name: f.replace('.json', ''), size: stat.size, sizeKB: (stat.size / 1024).toFixed(1) };
+    });
+    return { mode: 'json_nosql', collections, totalSizeKB: (totalSize / 1024).toFixed(1) };
+  }
 
+  try {
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState !== 1) return { error: 'Database not connected' };
     const db = mongoose.connection.db;
     const stats = await db.stats();
-
     return {
+      mode: 'mongodb',
       database: db.databaseName,
       collections: stats.collections,
       dataSize: formatBytes(stats.dataSize),
       storageSize: formatBytes(stats.storageSize),
       indexes: stats.indexes,
-      indexSize: formatBytes(stats.indexSize),
-      avgObjSize: formatBytes(stats.avgObjSize),
       documents: stats.objects,
     };
   } catch (error) {
@@ -207,149 +166,39 @@ const getDBStats = async () => {
   }
 };
 
-/**
- * Close database connection gracefully
- * @returns {Promise<void>}
- */
 const closeDB = async () => {
+  if (process.env.USE_JSON_DB === 'true') {
+    logger.info('JSON NoSQL — no connection to close');
+    return;
+  }
   try {
+    const mongoose = require('mongoose');
     await mongoose.connection.close();
-    logger.info('✅ MongoDB connection closed gracefully');
+    logger.info('MongoDB connection closed gracefully');
   } catch (error) {
-    logger.error('❌ Error closing MongoDB connection:', error.message);
+    logger.error('Error closing MongoDB connection:', error.message);
     throw error;
   }
 };
 
-/**
- * Drop database (use with extreme caution!)
- * Only works in development/test environments
- * @returns {Promise<void>}
- */
-const dropDB = async () => {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('Cannot drop database in production environment');
-  }
-
-  try {
-    await mongoose.connection.dropDatabase();
-    logger.warn('⚠️  Database dropped successfully');
-  } catch (error) {
-    logger.error('❌ Error dropping database:', error.message);
-    throw error;
-  }
-};
-
-/**
- * Clear all collections (use with extreme caution!)
- * Only works in development/test environments
- * @returns {Promise<void>}
- */
-const clearDB = async () => {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('Cannot clear database in production environment');
-  }
-
-  try {
-    const collections = Object.keys(mongoose.connection.collections);
-    
-    for (const collectionName of collections) {
-      const collection = mongoose.connection.collections[collectionName];
-      await collection.deleteMany({});
-    }
-    
-    logger.warn(`⚠️  Cleared ${collections.length} collections`);
-  } catch (error) {
-    logger.error('❌ Error clearing database:', error.message);
-    throw error;
-  }
-};
-
-/**
- * Format bytes to human-readable format
- * @param {number} bytes - Bytes to format
- * @returns {string} Formatted string
- */
 const formatBytes = (bytes) => {
   if (bytes === 0) return '0 Bytes';
-  
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
 };
 
-/**
- * Check if database is connected
- * @returns {boolean} Connection status
- */
 const isConnected = () => {
+  if (process.env.USE_JSON_DB === 'true') return true;
+  const mongoose = require('mongoose');
   return mongoose.connection.readyState === 1;
 };
 
-/**
- * Wait for database connection
- * @param {number} timeout - Timeout in milliseconds (default: 30000)
- * @returns {Promise<boolean>} Connection success
- */
-const waitForConnection = (timeout = 30000) => {
-  return new Promise((resolve, reject) => {
-    if (isConnected()) {
-      return resolve(true);
-    }
-
-    const timer = setTimeout(() => {
-      reject(new Error('Database connection timeout'));
-    }, timeout);
-
-    mongoose.connection.once('connected', () => {
-      clearTimeout(timer);
-      resolve(true);
-    });
-
-    mongoose.connection.once('error', (error) => {
-      clearTimeout(timer);
-      reject(error);
-    });
-  });
-};
-
-/**
- * Handle process termination
- */
-process.on('SIGINT', async () => {
-  try {
-    await closeDB();
-    logger.info('MongoDB connection closed through app termination');
-    process.exit(0);
-  } catch (error) {
-    logger.error('Error during SIGINT shutdown:', error.message);
-    process.exit(1);
-  }
-});
-
-process.on('SIGTERM', async () => {
-  try {
-    await closeDB();
-    logger.info('MongoDB connection closed through SIGTERM');
-    process.exit(0);
-  } catch (error) {
-    logger.error('Error during SIGTERM shutdown:', error.message);
-    process.exit(1);
-  }
-});
-
-// ==========================================
-// EXPORTS
-// ==========================================
 module.exports = {
   connectDB,
   closeDB,
   getDBHealth,
   getDBStats,
   isConnected,
-  waitForConnection,
-  dropDB,        // Development only
-  clearDB,       // Development only
 };

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "type": "object",
+  "required": ["name", "email"],
+  "properties": {
+    "name": { "type": "string", "minLength": 2, "maxLength": 100 },
+    "email": { "type": "string", "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" },
+    "password": { "type": "string", "minLength": 6 },
+    "role": { "type": "string", "enum": ["admin", "manager", "staff", "guest"] },
+    "permissions": { "type": "array", "itemSchema": { "type": "string" } },
+    "phone": { "type": "string", "pattern": "^\\+?[\\d\\s\\-()]+$" },
+    "hotelId": { "type": "string" },
+    "isActive": { "type": "boolean" },
+    "avatar": { "type": "string" }
+  }
+}
